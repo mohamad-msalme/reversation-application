@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="assets/images/favicon.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="<%= htmlWebpackPlugin.options.fontUrl %>" rel="stylesheet" />
+    <!-- Dynamic insertion of meta tags -->
+    <% htmlWebpackPlugin.options.meta.forEach((meta) => { %>
+        <meta <%= Object.entries(meta).map(([key, value]) => `${key}="${value}"`).join(' ') %>>
+      <% }); %>
+      
+  <title><%= htmlWebpackPlugin.options.title %></title>
+
+  </head>
+  <body>
+    <div id="loading-container">
+      <div id="loading-spinner"></div>
+    </div>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "Bundler",
+
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "paths": {
+      "pages/*": ["src/pages/*"],
+      "auth/pages/*": ["src/pages/auth/*"],
+      "dashboard/pages/*": ["src/pages/dashboard/*"],
+      "hooks/*": ["src/hooks/*"],
+      "components/*": ["src/components/*"],
+      "assets/*": ["assets/*"],
+      "services/*": ["src/api/services/*"],
+      "client/*": ["src/api/client/*"],
+      "icons/*": ["src/components/icons/*"],
+      "context/*": ["src/context/*"],
+      "models/*": ["src/models/*"],
+      "providers/*": ["src/providers/*"],
+      "theme/*": ["src/theme/*"],
+      "constants/*": ["src/constants/*"]
+    }
+  },
+
+  "include": ["src/**/*.ts", "src/**/*.tsx", "./global.d.ts"],
+  "exclude": ["node_modules", "./dist", "./build"]
+}
