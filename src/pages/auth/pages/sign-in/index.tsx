@@ -4,7 +4,7 @@ import { Header } from './Header'
 import { useNavigate } from 'react-router-dom'
 import { FormControl, FormGroup, Link, Typography } from '@mui/material'
 
-export const SignIn: React.FC = () => {
+export function SignIn() {
   const navigate = useNavigate()
 
   return (

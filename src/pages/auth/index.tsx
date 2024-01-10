@@ -8,6 +8,7 @@ export const AuthLayout: React.FC = () => {
   const isSmallerThanMd = useMediaQuery<Theme>(theme =>
     theme.breakpoints.down('md')
   )
+
   return (
     <Box
       sx={{
@@ -21,7 +22,7 @@ export const AuthLayout: React.FC = () => {
     >
       <Box
         sx={theme => ({
-          backgroundColor: theme.palette.common.white,
+          backgroundColor: theme.palette.background.paper,
           borderRadius: '10px',
           boxShadow: theme.shadows[10],
           display: 'flex',

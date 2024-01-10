@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React from 'react'
 
 import Person2Icon from '@mui/icons-material/Person2'
@@ -12,6 +13,7 @@ import {
   MenuItem,
   Tooltip
 } from '@mui/material'
+import { useLogout } from 'services/useLogout'
 
 export const AccountMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -22,6 +24,7 @@ export const AccountMenu: React.FC = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const logout = useLogout()
   return (
     <React.Fragment>
       <Tooltip title="Account settings">
@@ -50,7 +53,11 @@ export const AccountMenu: React.FC = () => {
           <ListItemText>Profile</ListItemText>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            logout().then(() => handleClose())
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -8,18 +8,40 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, FormGroup, InputAdornment, TextField } from '@mui/material'
+import { axiosInstance } from 'client/axiosInstance'
+
+const qwe = async (email: string, password: string) => {
+  try {
+    const data = await axiosInstance.post('/auth/signup', {
+      email,
+      password
+    })
+    console.log(data)
+    return data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
 export const Form: React.FC = () => {
   const {
     handleSubmit,
+    reset,
     register,
     formState: { errors, isSubmitting }
   } = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpSchema)
   })
 
-  const onSubmit: SubmitHandler<SignUpFormType> = data => {
-    console.log(data)
+  const onSubmit: SubmitHandler<SignUpFormType> = async data => {
+    try {
+      const result = await qwe(data.email, data.password)
+      console.log(result)
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   }
   const { passwordType, endAdornment } = useVisiblePassword()
   return (

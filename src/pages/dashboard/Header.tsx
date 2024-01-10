@@ -1,14 +1,41 @@
 import React from 'react'
 import { ThemeMode } from 'components/theme-mode'
 import { AccountMenu } from './AccountMenu'
-import { AppBar, Badge, Box, IconButton, Toolbar } from '@mui/material'
+import {
+  AppBar,
+  Badge,
+  Box,
+  IconButton,
+  Theme,
+  Toolbar,
+  useMediaQuery
+} from '@mui/material'
 
 import NotificationsIcon from '@mui/icons-material/Notifications'
+import MenuIcon from '@mui/icons-material/Menu'
 
-export const Header: React.FC = () => {
+type THeader = {
+  menuState: boolean
+  onMenuClick: React.Dispatch<React.SetStateAction<boolean>>
+}
+export const Header: React.FC<THeader> = ({ onMenuClick, menuState }) => {
+  const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'))
   return (
     <AppBar position="static">
       <Toolbar>
+        <IconButton
+          onClick={() => onMenuClick(!menuState)}
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          sx={{
+            transition: 'all 0.4s',
+            opacity: isMobile ? 0 : 1,
+            pointerEvents: isMobile ? 'none' : 'all '
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
         <Box display="flex" alignItems="center" columnGap={1} ml="auto">
           <ThemeMode />
           <IconButton>

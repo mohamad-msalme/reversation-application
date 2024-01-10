@@ -3,6 +3,7 @@ import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 
 import { z } from 'zod'
+import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -16,20 +17,31 @@ import {
   Link,
   TextField
 } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useSignin } from 'services/useSignin'
 
 export const Form: React.FC = () => {
+  const { mutateAsync } = useSignin()
   const navigate = useNavigate()
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting }
   } = useForm<SignInFormType>({
     resolver: zodResolver(SignInSchema)
   })
 
-  const onSubmit: SubmitHandler<SignInFormType> = data => {
-    console.log(data)
+  const onSubmit: SubmitHandler<SignInFormType> = async ({
+    password,
+    email
+  }) => {
+    try {
+      const result = await mutateAsync({ email, password })
+      console.log(result)
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const { passwordType, endAdornment } = useVisiblePassword()
