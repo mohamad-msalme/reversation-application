@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from 'hooks/useAuth'
+import { useIsAuth } from 'services/useIsAuth'
 
 interface ProtectedRouteProps {
   authenticatedElement: React.ReactNode
@@ -10,7 +10,7 @@ export const ProtectedRoute = ({
   authenticatedElement,
   unauthenticatedElement
 }: ProtectedRouteProps) => {
-  const { isAuthnicated } = useAuth()
+  const isAuthnicated = useIsAuth()
 
   return isAuthnicated ? authenticatedElement : unauthenticatedElement
 }

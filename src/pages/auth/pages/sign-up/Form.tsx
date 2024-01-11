@@ -4,25 +4,11 @@ import EmailIcon from '@mui/icons-material/Email'
 import PersonIcon from '@mui/icons-material/Person'
 
 import { z } from 'zod'
+import { useSignup } from 'services/useSignup'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, FormGroup, InputAdornment, TextField } from '@mui/material'
-import { axiosInstance } from 'client/axiosInstance'
-
-const qwe = async (email: string, password: string) => {
-  try {
-    const data = await axiosInstance.post('/auth/signup', {
-      email,
-      password
-    })
-    console.log(data)
-    return data
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
 
 export const Form: React.FC = () => {
   const {
@@ -34,15 +20,20 @@ export const Form: React.FC = () => {
     resolver: zodResolver(SignUpSchema)
   })
 
-  const onSubmit: SubmitHandler<SignUpFormType> = async data => {
+  const signup = useSignup()
+
+  const onSubmit: SubmitHandler<SignUpFormType> = async ({
+    email,
+    password
+  }) => {
     try {
-      const result = await qwe(data.email, data.password)
-      console.log(result)
+      await signup({ email, password })
       reset()
     } catch (error) {
       console.log(error)
     }
   }
+
   const { passwordType, endAdornment } = useVisiblePassword()
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

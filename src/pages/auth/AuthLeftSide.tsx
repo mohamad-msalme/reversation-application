@@ -1,10 +1,8 @@
 import React from 'react'
 import logInImg from 'assets/images/log-in.webp'
 import { Box, Theme, useMediaQuery } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 
 export const AuthLeftSide: React.FC = () => {
-  const navigate = useNavigate()
   const isSmallerThanMd = useMediaQuery<Theme>(theme =>
     theme.breakpoints.down('md')
   )
@@ -83,7 +81,6 @@ export const AuthLeftSide: React.FC = () => {
       }}
     >
       <img
-        onClick={() => navigate('/home')}
         ref={img3D}
         style={{
           maxWidth: '100%'

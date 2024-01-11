@@ -13,7 +13,6 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
   const themeState = useLocalStorage<PaletteMode>('prefered-theme', 'light')
   const theme = themeState.value === 'light' ? LightTheme : DarkTheme
-
   const contextValue = React.useMemo(
     () => ({ theme: themeState.value!, setTheme: themeState.setValue }),
     [themeState.value, themeState.setValue]

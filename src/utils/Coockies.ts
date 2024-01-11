@@ -15,20 +15,4 @@ export class Coockies {
       return undefined
     }
   }
-
-  static updateTheme(theme: string): void {
-    cookies.set('user-theme', theme)
-  }
-
-  static getTheme() {
-    const userTheme = cookies.get('user-theme')
-    try {
-      const parsedVal = userTheme
-        ? (JSON.parse(userTheme) as string)
-        : undefined
-      return parsedVal
-    } catch (error) {
-      return undefined
-    }
-  }
 }

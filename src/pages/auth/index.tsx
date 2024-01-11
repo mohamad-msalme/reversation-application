@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Outlet } from 'react-router-dom'
+import { Background } from 'pages/Background'
 import { AuthLeftSide } from './AuthLeftSide'
 import { Box, Theme, useMediaQuery } from '@mui/material'
 
@@ -10,16 +11,7 @@ export const AuthLayout: React.FC = () => {
   )
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100vh',
-        backgroundImage: 'linear-gradient(-135deg,#c850c0,#4158d0)'
-      }}
-    >
+    <Background>
       <Box
         sx={theme => ({
           backgroundColor: theme.palette.background.paper,
@@ -35,6 +27,6 @@ export const AuthLayout: React.FC = () => {
           <Outlet />
         </Box>
       </Box>
-    </Box>
+    </Background>
   )
 }
