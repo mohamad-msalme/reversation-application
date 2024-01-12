@@ -12,7 +12,7 @@ type TVariables = {
 }
 export const signup = async ({ email, password }: TVariables) => {
   try {
-    const data = await axiosInstance.post<SuccessUserResponse>('/auth/login', {
+    const data = await axiosInstance.post<SuccessUserResponse>('/auth/signup', {
       email,
       password
     })
