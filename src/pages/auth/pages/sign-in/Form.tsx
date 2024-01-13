@@ -18,10 +18,12 @@ import {
   TextField
 } from '@mui/material'
 import { useSignin } from 'services/useSignin'
+import { useSuccessAuth } from 'services/useSuccessAuth'
 
 export const Form: React.FC = () => {
-  const { mutateAsync } = useSignin()
   const navigate = useNavigate()
+  const { mutateAsync } = useSignin()
+  const successAuth = useSuccessAuth()
   const {
     handleSubmit,
     register,
@@ -37,8 +39,8 @@ export const Form: React.FC = () => {
   }) => {
     try {
       const result = await mutateAsync({ email, password })
-      console.log(result)
       reset()
+      successAuth(result)
     } catch (error) {
       console.log(error)
     }

@@ -20,14 +20,14 @@ export const Form: React.FC = () => {
     resolver: zodResolver(SignUpSchema)
   })
 
-  const signup = useSignup()
+  const { mutateAsync } = useSignup()
 
   const onSubmit: SubmitHandler<SignUpFormType> = async ({
     email,
     password
   }) => {
     try {
-      await signup({ email, password })
+      await mutateAsync({ email, password })
       reset()
     } catch (error) {
       console.log(error)

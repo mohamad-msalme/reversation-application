@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import cookies from 'js-cookie'
 import { User } from 'models/User'
 

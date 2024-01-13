@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable no-useless-catch */
-import { Coockies } from '../../utils/Coockies'
-import { useMutation } from 'react-query'
-import { useNavigate } from 'react-router-dom'
 import { axiosInstance } from 'client/axiosInstance'
-import { SuccessUserResponse } from 'models/User'
+import { SuccessUserResponse, User } from 'models/User'
+import { UseMutationOptions, useMutation } from 'react-query'
 
 type TVariables = {
   email: string
@@ -18,27 +14,11 @@ export const signup = async ({ email, password }: TVariables) => {
     })
     return data.data.success.user
   } catch (error) {
+    console.log(error)
     throw error
   }
 }
 
-export const useSignup = () => {
-  const navigation = useNavigate()
-  const { mutateAsync } = useMutation(signup, {
-    onSuccess: data => {
-      Coockies.updateUserInfo(JSON.stringify(data))
-      navigation('/home')
-    }
-  })
-
-  const mutaion = async (variables: TVariables) => {
-    try {
-      const data = await mutateAsync(variables)
-      return data
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  return mutaion
-}
+export const useSignup = (
+  options: UseMutationOptions<User, unknown, TVariables, unknown> = {}
+) => useMutation(signup, options)

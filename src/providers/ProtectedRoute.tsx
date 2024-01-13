@@ -10,7 +10,6 @@ export const ProtectedRoute = ({
   authenticatedElement,
   unauthenticatedElement
 }: ProtectedRouteProps) => {
-  const isAuthnicated = useIsAuth()
-
-  return isAuthnicated ? authenticatedElement : unauthenticatedElement
+  const isAuthinicated = useIsAuth()
+  return isAuthinicated ? authenticatedElement : unauthenticatedElement
 }

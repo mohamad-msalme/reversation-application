@@ -1,12 +1,15 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import { Outlet } from 'react-router'
 import { Header } from './Header'
 import { NavBar } from './NavBar'
 import { useIsAuth } from 'services/useIsAuth'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export const DashboardLayout: React.FC = () => {
-  useIsAuth()
+  const location = useLocation()
+  useIsAuth({
+    enabled: location.state !== 'fromAuth'
+  })
   const [menuIcon, setMenuIcon] = React.useState(false)
 
   return (
