@@ -1,9 +1,12 @@
 import React from 'react'
 
+import { Home } from 'pages/dashboard/home'
 import { SignIn } from 'pages/auth/pages/sign-in'
 import { SignUp } from 'pages/auth/pages/sign-up'
+import { Property } from 'pages/dashboard/property'
 import { ErrorPage } from 'pages/ErrorPage'
 import { AuthLayout } from 'pages/auth'
+import { Reservation } from 'pages/dashboard/reservation'
 import { ForgetPassword } from 'pages/auth/pages/forget-password'
 import { ProtectedRoute } from 'providers/ProtectedRoute'
 import { DashboardLayout } from 'pages/dashboard/Layout'
@@ -11,6 +14,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 import HomeIcon from '@mui/icons-material/Home'
 import EditCalendarIcon from '@mui/icons-material/EditCalendar'
+import ApartmentIcon from '@mui/icons-material/Apartment'
 
 export type TPROTECTED_PAGES = {
   path: string
@@ -24,13 +28,19 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     path: '/home',
     label: 'Home',
     icon: <HomeIcon />,
-    element: <div>one</div>
+    element: <Home />
   },
   {
-    path: '/booking',
-    label: 'Booking ',
+    path: '/reservation',
+    label: 'Reservation ',
     icon: <EditCalendarIcon />,
-    element: <div>Two</div>
+    element: <Reservation />
+  },
+  {
+    path: '/property',
+    label: 'Property',
+    icon: <ApartmentIcon />,
+    element: <Property />
   }
 ]
 

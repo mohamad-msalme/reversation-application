@@ -16,6 +16,7 @@ export const signin = async ({ email, password }: TVariables) => {
       email,
       password
     })
+    console.log(data.headers, data)
     return data.data.success.user
   } catch (error) {
     throw error

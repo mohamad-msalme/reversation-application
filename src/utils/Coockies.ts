@@ -3,7 +3,9 @@ import { User } from 'models/User'
 
 export class Coockies {
   static updateUserInfo(userInfo: string): void {
-    cookies.set('user-info', userInfo)
+    cookies.set('user-info', userInfo, {
+      expires: 1
+    })
   }
 
   static getUserInfo() {

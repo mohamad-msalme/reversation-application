@@ -13,6 +13,7 @@
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --ext .ts,.tsx src/ --fix"
   },
+  "proxy": "https://www.modernlock-dev.biz/api/v1/",
   "keywords": [],
   "author": "",
   "license": "ISC",

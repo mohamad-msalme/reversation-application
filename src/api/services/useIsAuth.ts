@@ -20,5 +20,5 @@ export const useIsAuth = () => {
     },
     onError: () => {}
   })
-  return data
+  return Boolean(data?.data.success.user._id)
 }

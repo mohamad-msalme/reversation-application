@@ -44,7 +44,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      title: 'Your Dynamic Title',
+      title: 'Modern lock',
       fontUrl:
         'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
       meta: [
