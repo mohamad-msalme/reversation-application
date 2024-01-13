@@ -25,7 +25,8 @@ module.exports = {
       theme: path.join(__dirname, 'src/theme'),
       components: path.join(__dirname, 'src/components'),
       assets: path.join(__dirname, 'assets'),
-      constants: path.join(__dirname, 'src/constants')
+      constants: path.join(__dirname, 'src/constants'),
+      utils: path.join(__dirname, 'src/utils')
     }
   },
   module: {

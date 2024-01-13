@@ -30,7 +30,8 @@
       "models/*": ["src/models/*"],
       "providers/*": ["src/providers/*"],
       "theme/*": ["src/theme/*"],
-      "constants/*": ["src/constants/*"]
+      "constants/*": ["src/constants/*"],
+      "utils/*": ["src/utils/*"]
     }
   },
 
