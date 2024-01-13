@@ -17,6 +17,13 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 3000
-  }
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://www.modernlock-dev.biz/api',  // Target server (your API server)
+        changeOrigin: true,                // Change the origin of the host header to the target URL
+        pathRewrite: { '^/api': '' },      // Remove the '/api' prefix when forwarding the request
+      },
+    },
+  },
 }
