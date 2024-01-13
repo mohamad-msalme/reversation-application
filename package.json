@@ -1,9 +1,8 @@
 {
-  "name": "Trello",
+  "name": "lock",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "https://www.modernlock-dev.biz",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pnpm run webpack:dev",
@@ -14,7 +13,6 @@
     "lint": "eslint --ext .ts,.tsx src/",
     "lint:fix": "eslint --ext .ts,.tsx src/ --fix"
   },
-  "proxy": "https://www.modernlock-dev.biz/api/v1/",
   "keywords": [],
   "author": "",
   "license": "ISC",
