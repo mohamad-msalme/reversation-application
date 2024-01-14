@@ -1,45 +1,28 @@
 import React from 'react'
-import { Box } from '@mui/material'
 import { Header } from './Header'
 import { NavBar } from './NavBar'
-import { useIsAuth } from 'services/useIsAuth'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
+import { Box, Theme, useTheme } from '@mui/material'
+
+import './layout.scss'
+import clsx from 'clsx'
 
 export const DashboardLayout: React.FC = () => {
-  const location = useLocation()
-  useIsAuth({
-    enabled: location.state !== 'fromAuth'
-  })
+  const isDark = useTheme<Theme>().palette.mode === 'dark'
   const [menuIcon, setMenuIcon] = React.useState(false)
 
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        minHeight: '100vh',
-        gridTemplateColumns:
-          '[drawer] max-content [full-start] minmax(2vw, 4vw) repeat(9,[col-start] 1fr [col-end]) [full-end] minmax(2vw, 4vw)',
-        gridTemplateRows: 'auto 1fr'
-      }}
-    >
-      <Box
-        sx={{
-          gridColumn: 'drawer / -1'
-        }}
-      >
+    <Box className="container">
+      <Box className="header">
         <Header menuState={menuIcon} onMenuClick={setMenuIcon} />
       </Box>
-      <Box
-        sx={{
-          gridRow: 2
-        }}
-      >
+      <Box className="nav-bar">
         <NavBar menuState={menuIcon} />
       </Box>
       <Box
-        sx={{
-          gridColumn: 'col-start 1 / full-end'
-        }}
+        className={clsx('main', {
+          'main--dark': isDark
+        })}
       >
         <Outlet />
       </Box>

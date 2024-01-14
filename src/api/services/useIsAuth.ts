@@ -4,6 +4,7 @@ import { AxiosResponse } from 'axios'
 import { axiosInstance } from 'client/axiosInstance'
 import { SuccessUserResponse } from 'models/User'
 import { UseQueryOptions, useQuery } from 'react-query'
+import { useLocation } from 'react-router-dom'
 
 const getIsAuth = async () => {
   try {
@@ -22,8 +23,11 @@ export const useIsAuth = (
     string[]
   > = {}
 ) => {
+  const location = useLocation()
   const userInfo = Coockies.getUserInfo()
+  const enabled = location.state !== 'fromAuth'
   const { isSuccess } = useQuery(['userAut', userInfo?._id || ''], getIsAuth, {
+    enabled,
     ...options,
     suspense: true,
     useErrorBoundary: false,
@@ -32,6 +36,6 @@ export const useIsAuth = (
       Coockies.updateUserInfo(JSON.stringify(data))
     }
   })
-
-  return isSuccess
+  // if enable is false that means user coming from log in or sign up page there is no need to check that auth state
+  return enabled ? isSuccess : true
 }

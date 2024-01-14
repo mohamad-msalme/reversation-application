@@ -3,8 +3,10 @@ import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 
 import { z } from 'zod'
+import { useSignin } from 'services/useSignin'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSuccessAuth } from 'services/useSuccessAuth'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -17,8 +19,7 @@ import {
   Link,
   TextField
 } from '@mui/material'
-import { useSignin } from 'services/useSignin'
-import { useSuccessAuth } from 'services/useSuccessAuth'
+import { Coockies } from 'utils/Coockies'
 
 export const Form: React.FC = () => {
   const navigate = useNavigate()
@@ -28,26 +29,30 @@ export const Form: React.FC = () => {
     handleSubmit,
     register,
     reset,
+    watch,
     formState: { errors, isSubmitting }
   } = useForm<SignInFormType>({
-    resolver: zodResolver(SignInSchema)
+    resolver: zodResolver(SignInSchema),
+    defaultValues: Coockies.getUserCradintional()
   })
 
   const onSubmit: SubmitHandler<SignInFormType> = async ({
     password,
-    email
+    email,
+    rememberMe
   }) => {
     try {
       const result = await mutateAsync({ email, password })
-      reset()
+      Coockies.updateUserCradintional(
+        rememberMe ? { email, password, rememberMe } : undefined
+      )
       successAuth(result)
+      reset()
     } catch (error) {
       console.log(error)
     }
   }
-
   const { passwordType, endAdornment } = useVisiblePassword()
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormGroup
@@ -66,9 +71,10 @@ export const Form: React.FC = () => {
           variant="filled"
           fullWidth
           label="Email"
+          {...register('email')}
+          name="email"
           type="email"
           placeholder="enter email..."
-          {...register('email')}
           error={Boolean(errors.email)}
           helperText={errors.email?.message}
         >
@@ -76,13 +82,14 @@ export const Form: React.FC = () => {
         </TextField>
 
         <TextField
+          {...register('password')}
+          name="password"
           placeholder="enter password..."
           variant="filled"
           fullWidth
           label="Password"
           type={passwordType}
           InputProps={{ endAdornment }}
-          {...register('password')}
           error={Boolean(errors.password)}
           helperText={errors.password?.message}
         >
@@ -96,8 +103,14 @@ export const Form: React.FC = () => {
           }}
         >
           <FormControlLabel
-            control={<Checkbox color="primary" {...register('rememberMe')} />}
             label="Remember me"
+            control={
+              <Checkbox
+                color="primary"
+                {...register('rememberMe')}
+                checked={watch('rememberMe')}
+              />
+            }
           />
           <Link onClick={() => navigate('/forgetpassword')}>
             Forget password?
