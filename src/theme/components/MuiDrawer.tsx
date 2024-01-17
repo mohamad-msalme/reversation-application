@@ -1,7 +1,6 @@
 import { Components, Palette } from '@mui/material'
 
-export const MuiDrawer = (props: Palette): Components['MuiDrawer'] => {
-  console.log(props)
+export const MuiDrawer = (_props: Palette): Components['MuiDrawer'] => {
   return {
     defaultProps: {
       anchor: 'left',

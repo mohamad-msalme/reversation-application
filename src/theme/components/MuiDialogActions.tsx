@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Components, Palette } from '@mui/material'
 
-export const MuiLink = (_props: Palette): Components['MuiLink'] => {
+export const MuiDialogActions = (
+  _props: Palette
+): Components['MuiDialogActions'] => {
   return {
     defaultProps: {
       sx: {
-        cursor: 'pointer'
-      },
-      underline: 'none'
+        justifyContent: 'center'
+      }
     }
   }
 }

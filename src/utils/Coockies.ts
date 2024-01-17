@@ -32,7 +32,6 @@ export class Coockies {
       const parsedVal = userCradintional
         ? (JSON.parse(userCradintional) as SignInFormType)
         : undefined
-      console.log(parsedVal)
       return parsedVal
     } catch (error) {
       return undefined

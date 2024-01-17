@@ -1,5 +1,5 @@
 import React from 'react'
-import { TPROTECTED_PAGES } from '../../Routes'
+import { TPROTECTED_PAGES } from 'src/ProtectedPages'
 import { Link, useLocation } from 'react-router-dom'
 
 import {
@@ -23,7 +23,7 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
   icon
 }) => {
   const isMobile =
-    useMediaQuery<Theme>(theme => theme.breakpoints.down('sm')) || menuState
+    useMediaQuery<Theme>(theme => theme.breakpoints.down('md')) || menuState
   const location = useLocation()
   const Item = (
     <ListItemButton
@@ -32,10 +32,11 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
       selected={location.pathname === path}
     >
       <ListItemIcon
-        sx={{
+        sx={theme => ({
           justifyContent: isMobile ? 'center' : 'normal',
-          minWidth: isMobile ? 'fit-content' : '56px'
-        }}
+          minWidth: isMobile ? 'fit-content' : '56px',
+          color: theme.palette.primary.main
+        })}
       >
         {icon}
       </ListItemIcon>

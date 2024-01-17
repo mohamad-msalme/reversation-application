@@ -5,7 +5,7 @@ import { Header } from './Header'
 import { useNavigate } from 'react-router-dom'
 import { FormControl, FormGroup, Link, Typography } from '@mui/material'
 
-export const SignUp: React.FC = () => {
+const SignUp: React.FC = () => {
   const navigate = useNavigate()
   return (
     <FormControl>
@@ -23,9 +23,13 @@ export const SignUp: React.FC = () => {
           })}
         >
           Already have an account?
-          <Link onClick={() => navigate('/login')}>Sign in here</Link>
+          <Link onClick={() => navigate('/login', { state: 'SignUp' })}>
+            Sign in here
+          </Link>
         </Typography>
       </FormGroup>
     </FormControl>
   )
 }
+
+export default SignUp

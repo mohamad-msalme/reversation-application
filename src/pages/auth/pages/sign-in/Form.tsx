@@ -3,6 +3,7 @@ import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 
 import { z } from 'zod'
+import { Coockies } from 'utils/Coockies'
 import { useSignin } from 'services/useSignin'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +20,6 @@ import {
   Link,
   TextField
 } from '@mui/material'
-import { Coockies } from 'utils/Coockies'
 
 export const Form: React.FC = () => {
   const navigate = useNavigate()
@@ -49,7 +49,7 @@ export const Form: React.FC = () => {
       successAuth(result)
       reset()
     } catch (error) {
-      console.log(error)
+      //
     }
   }
   const { passwordType, endAdornment } = useVisiblePassword()
@@ -112,7 +112,9 @@ export const Form: React.FC = () => {
               />
             }
           />
-          <Link onClick={() => navigate('/forgetpassword')}>
+          <Link
+            onClick={() => navigate('/forgetpassword', { state: 'signIn' })}
+          >
             Forget password?
           </Link>
         </FormGroup>

@@ -2,8 +2,7 @@ import * as React from 'react'
 
 import { NavBarItem } from './NavBarItem'
 import { Drawer, List } from '@mui/material'
-import { PROTECTED_PAGES } from '../../Routes'
-
+import { PROTECTED_PAGES } from './../../ProtectedPages'
 type TNavBar = {
   menuState: boolean
 }

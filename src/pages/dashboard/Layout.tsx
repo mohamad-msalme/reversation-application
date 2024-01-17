@@ -10,7 +10,6 @@ import clsx from 'clsx'
 export const DashboardLayout: React.FC = () => {
   const isDark = useTheme<Theme>().palette.mode === 'dark'
   const [menuIcon, setMenuIcon] = React.useState(false)
-
   return (
     <Box className="container">
       <Box className="header">

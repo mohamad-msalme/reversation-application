@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { axiosInstance } from 'client/axiosInstance'
 import { SuccessUserResponse, User } from 'models/User'
 import { UseMutationOptions, useMutation } from 'react-query'
@@ -14,7 +15,6 @@ export const signup = async ({ email, password }: TVariables) => {
     })
     return data.data.success.user
   } catch (error) {
-    console.log(error)
     throw error
   }
 }

@@ -4,7 +4,7 @@ import { Header } from './Header'
 import { useNavigate } from 'react-router-dom'
 import { FormControl, FormGroup, Link, Typography } from '@mui/material'
 
-export const SignIn: React.FC = () => {
+const SignIn: React.FC = () => {
   const navigate = useNavigate()
 
   return (
@@ -30,3 +30,5 @@ export const SignIn: React.FC = () => {
     </FormControl>
   )
 }
+
+export default SignIn

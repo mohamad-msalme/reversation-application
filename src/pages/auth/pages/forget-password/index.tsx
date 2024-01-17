@@ -1,3 +1,4 @@
 import React from 'react'
 
-export const ForgetPassword: React.FC = () => <div>ForgetPassword</div>
+const ForgetPassword: React.FC = () => <div>ForgetPassword</div>
+export default ForgetPassword
