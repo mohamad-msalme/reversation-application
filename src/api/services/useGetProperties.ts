@@ -1,4 +1,3 @@
-import { Coockies } from 'utils/Coockies'
 import { axiosInstance } from 'client/axiosInstance'
 import { UseQueryOptions, useQuery } from 'react-query'
 import { Property, SuccessPropertiesResponse } from 'models/Property'
@@ -21,8 +20,7 @@ export const useGetProperties = (
     string[]
   >
 ) => {
-  const userInfo = Coockies.getUserInfo()
-  return useQuery(['useGetProperties', userInfo?._id || ''], fetchProperties, {
+  return useQuery(['useGetProperties'], fetchProperties, {
     ...option
   })
 }

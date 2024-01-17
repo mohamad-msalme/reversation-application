@@ -19,7 +19,14 @@ const EditDialog: React.FC<TDialog> = ({ mode }) => {
   const closeDialog = () => navigate('/property')
   const fullScreen = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'))
   return (
-    <MuiDialog onClose={closeDialog} fullScreen={fullScreen} open={true}>
+    <MuiDialog
+      fullWidth
+      maxWidth="lg"
+      scroll="paper"
+      onClose={closeDialog}
+      fullScreen={fullScreen}
+      open={true}
+    >
       <DialogTitle>{`${mode} property`}</DialogTitle>
       <IconButton
         aria-label="close"

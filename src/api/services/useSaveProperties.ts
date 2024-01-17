@@ -1,7 +1,6 @@
-import { useMutation } from 'react-query'
-import { axiosInstance } from 'client/axiosInstance'
-import { useGetProperties } from './useGetProperties'
 import { PropertyForm } from 'pages/dashboard/property/components/PropertyFormSchema'
+import { axiosInstance } from 'client/axiosInstance'
+import { useMutation, useQueryClient } from 'react-query'
 
 export const postProperties = async (payload: PropertyForm) => {
   try {
@@ -23,7 +22,7 @@ export const patchProperties = async (payload: {
 }
 
 export const useSaveProperties = (id?: string) => {
-  const { refetch } = useGetProperties({ enabled: false })
+  const queryClient = useQueryClient()
   const { mutateAsync: postAsync, ...post } = useMutation(
     'postProperties',
     postProperties
@@ -35,9 +34,26 @@ export const useSaveProperties = (id?: string) => {
 
   const save = async (payload: PropertyForm) => {
     if (id) {
-      await patchAsync({ id, data: payload }, { onSuccess: () => refetch() })
+      await patchAsync(
+        { id, data: payload },
+        {
+          onSuccess: async () => {
+            await queryClient.invalidateQueries({
+              queryKey: ['useGetProperty', id]
+            })
+            await queryClient.invalidateQueries({
+              queryKey: ['useGetProperties']
+            })
+          }
+        }
+      )
     } else {
-      await postAsync(payload, { onSuccess: () => refetch() })
+      await postAsync(payload, {
+        onSuccess: async () =>
+          await queryClient.invalidateQueries({
+            queryKey: ['useGetProperties']
+          })
+      })
     }
   }
 

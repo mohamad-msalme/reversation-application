@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { TMode } from './EditDialog'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { MapProperty } from './MapProperty'
 import { useGetProperty } from 'services/useGetProperty'
 import { useSaveProperties } from 'services/useSaveProperties'
 import { TextFieldController } from './TextFieldController'
@@ -26,29 +27,30 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
 }) => {
   const enabled = Boolean(id)
   const disabled = mode === 'View'
-
+  const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'))
   const { data } = useGetProperty(id || '', {
     enabled,
     suspense: true
   })
 
-  const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'))
-
   const {
     handleSubmit,
     control,
+    setValue,
     reset,
+    watch,
     formState: { isSubmitting }
   } = useForm<PropertyForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     resolver: zodResolver(PropertyFormSchema),
-    defaultValues: data || {}
+    defaultValues: data ?? {}
   })
+
   const { mutateAsync } = useSaveProperties(id)
+
   const onSubmit: SubmitHandler<PropertyForm> = async data => {
     try {
-      console.log(data)
       await mutateAsync(data)
       reset()
       handelCancel()
@@ -67,82 +69,60 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <FormGroup sx={{ rowGap: 3, flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
+        <FormGroup
+          row={!isMobile}
+          sx={{ columnGap: 3, rowGap: 3, marginBottom: 3, padding: 2 }}
+        >
           <TextFieldController
             control={control}
             disabled={disabled}
             fieldName="name"
             label="Name"
           />
-
-          <FormGroup
-            sx={{
-              rowGap: 2,
-              columnGap: 2,
-              flexWrap: isMobile ? 'wrap' : 'nowrap'
-            }}
-            row
-          >
-            <TextFieldController
-              control={control}
-              disabled={disabled}
-              fieldName="serialNumber"
-              label="serial number"
-            />
-            <TextFieldController
-              control={control}
-              disabled={disabled}
-              fieldName="phone"
-              label="phone"
-            />
-          </FormGroup>
-          <FormGroup
-            sx={{
-              rowGap: 2,
-              columnGap: 2,
-              flexWrap: isMobile ? 'wrap' : 'nowrap'
-            }}
-            row
-          >
-            <TextFieldController
-              control={control}
-              disabled={disabled}
-              fieldName="address.country"
-              label="Country"
-            />
-            <TextFieldController
-              control={control}
-              disabled={disabled}
-              fieldName="address.city"
-              label="City"
-            />
-          </FormGroup>
-          <DialogActions
-            sx={{ columnGap: 2, justifyContent: 'center', padding: 0 }}
-          >
-            {['Edit', 'New'].includes(mode) ? (
-              <Button
-                type="submit"
-                variant="contained"
-                name="save"
-                color="success"
-                startIcon={<SaveIcon />}
-                disabled={isSubmitting}
-              >
-                Save
-              </Button>
-            ) : null}
-
-            <Button
-              variant="contained"
-              name="cancel"
-              startIcon={<CloseIcon />}
-              onClick={handelCancel}
-            >
-              Cancel
-            </Button>
-          </DialogActions>
+          <TextFieldController
+            control={control}
+            disabled={disabled}
+            fieldName="serialNumber"
+            label="serial number"
+          />
+          <TextFieldController
+            control={control}
+            disabled={disabled}
+            fieldName="phone"
+            label="phone"
+          />
         </FormGroup>
+        <MapProperty mode={mode} id={id} setValue={setValue} watch={watch} />
+        <DialogActions
+          sx={{
+            columnGap: 2,
+            justifyContent: 'center',
+            padding: 0,
+            marginTop: 3
+          }}
+        >
+          {['Edit', 'New'].includes(mode) ? (
+            <Button
+              type="submit"
+              variant="contained"
+              name="save"
+              color="success"
+              startIcon={<SaveIcon />}
+              disabled={isSubmitting}
+            >
+              Save
+            </Button>
+          ) : null}
+
+          <Button
+            variant="contained"
+            name="cancel"
+            startIcon={<CloseIcon />}
+            onClick={handelCancel}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
       </form>
     </DialogContent>
   )

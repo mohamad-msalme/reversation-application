@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, Theme, useMediaQuery } from '@mui/material'
+import { TextField } from '@mui/material'
 import { PropertyForm } from './PropertyFormSchema'
 import { Control, Controller } from 'react-hook-form'
 
@@ -15,7 +15,6 @@ export const TextFieldController: React.FC<TTextFieldController> = ({
   disabled,
   control
 }) => {
-  const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'))
   return (
     <Controller
       name={fieldName}
@@ -23,7 +22,9 @@ export const TextFieldController: React.FC<TTextFieldController> = ({
       disabled={disabled}
       render={({ field: { ref, ...field }, fieldState: { error } }) => (
         <TextField
-          fullWidth={isMobile}
+          sx={{
+            flex: 1
+          }}
           label={label}
           required
           error={Boolean(error)}
