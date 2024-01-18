@@ -27,7 +27,7 @@ export const useLogout = (
     ...options,
     onSuccess: async (...params) => {
       await options?.onSuccess?.(...params)
-      Coockies.updateUserInfo('undefined')
+      Coockies.removeUserInfo()
       navigate('/login')
     }
   })

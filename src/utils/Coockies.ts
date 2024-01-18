@@ -20,10 +20,16 @@ export class Coockies {
     }
   }
 
-  static updateUserCradintional(val?: SignInFormType): void {
-    val
-      ? cookies.set('user-cradintional', JSON.stringify(val))
-      : cookies.remove('user-cradintional')
+  static removeUserInfo() {
+    cookies.remove('user-info')
+  }
+
+  static updateUserCradintional(val: SignInFormType) {
+    cookies.set('user-cradintional', JSON.stringify(val))
+  }
+
+  static removeUserCradintional() {
+    cookies.remove('user-cradintional')
   }
 
   static getUserCradintional(): SignInFormType | undefined {

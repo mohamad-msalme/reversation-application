@@ -37,15 +37,12 @@ export const Form: React.FC = () => {
   })
 
   const onSubmit: SubmitHandler<SignInFormType> = async ({
-    password,
-    email,
-    rememberMe
+    rememberMe,
+    ...rest
   }) => {
     try {
-      const result = await mutateAsync({ email, password })
-      Coockies.updateUserCradintional(
-        rememberMe ? { email, password, rememberMe } : undefined
-      )
+      const result = await mutateAsync(rest)
+      if (rememberMe) Coockies.updateUserCradintional({ ...rest, rememberMe })
       successAuth(result)
       reset()
     } catch (error) {

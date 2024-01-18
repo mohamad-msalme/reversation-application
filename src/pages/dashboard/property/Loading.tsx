@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material'
 export const Loading: React.FC = () => (
   <Box
     display="flex"
-    width={400}
+    width={'100%'}
     height={200}
     justifyContent={'center'}
     alignItems="center"
