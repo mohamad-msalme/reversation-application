@@ -6,9 +6,8 @@ const Home: React.FC = () => {
   const navigate = useNavigate()
   const [_isPending, startTransition] = React.useTransition()
   const [value, setValue] = React.useState(0)
-
+  console.log(_isPending)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log(event, newValue)
     startTransition(() => {
       setValue(newValue)
     })

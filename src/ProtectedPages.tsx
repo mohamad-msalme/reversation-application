@@ -33,13 +33,13 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
       },
       {
         path: 'departure',
-        element: <HomeCards title="Departure" type="departure" />,
+        element: <HomeCards title="Departure" type="departures" />,
         icon: <HomeIcon />,
         label: 'Departure'
       },
       {
         path: 'staysover',
-        element: <HomeCards title="Stays-over" type="stays_over" />,
+        element: <HomeCards title="Stays-over" type="stayovers" />,
         icon: <HomeIcon />,
         label: 'Stays-over'
       }

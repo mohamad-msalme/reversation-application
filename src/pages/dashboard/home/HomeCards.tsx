@@ -1,15 +1,14 @@
 import React from 'react'
-import { useArrivals } from 'services/useArrivals'
-import { useGetProperties } from 'services/useGetProperties'
+import { ReservationsType } from 'models/Reservation'
+import { useReservationsByType } from 'services/useReservationsByType'
 
 type HomeCards = {
   title: string
-  type: 'arrivals' | 'departure' | 'stays_over'
+  type: ReservationsType
 }
 export const HomeCards: React.FC<HomeCards> = ({ title, type }) => {
-  const properties = useGetProperties()
-  const arrivals = useArrivals()
-  console.log(properties, arrivals)
+  const { data } = useReservationsByType(type)
+  console.log(data)
   return (
     <div>
       {title}
