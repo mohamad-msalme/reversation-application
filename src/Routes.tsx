@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
     children: PROTECTED_PAGES.map(({ path, element, children }) => ({
       path,
       element: element,
-      children
+      children: children
     }))
   }
 ])

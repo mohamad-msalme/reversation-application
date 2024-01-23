@@ -8,6 +8,7 @@ import Reservation from 'pages/dashboard/reservation'
 import DeleteDialog from 'pages/dashboard/property/components/DeleteDialog'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import EditCalendarIcon from '@mui/icons-material/EditCalendar'
+import { HomeCards } from 'pages/dashboard/home/HomeCards'
 
 export type TPROTECTED_PAGES = {
   path: string
@@ -22,7 +23,27 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     path: '/home',
     label: 'Home',
     icon: <HomeIcon />,
-    element: <Home />
+    element: <Home />,
+    children: [
+      {
+        path: 'arrivals',
+        element: <HomeCards title="Arrivals" type="arrivals" />,
+        icon: <HomeIcon />,
+        label: 'Arrivals'
+      },
+      {
+        path: 'departure',
+        element: <HomeCards title="Departure" type="departure" />,
+        icon: <HomeIcon />,
+        label: 'Departure'
+      },
+      {
+        path: 'staysover',
+        element: <HomeCards title="Stays-over" type="stays_over" />,
+        icon: <HomeIcon />,
+        label: 'Stays-over'
+      }
+    ]
   },
   {
     path: '/reservation',
@@ -38,6 +59,7 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     children: [
       {
         path: 'edit/:id',
+
         label: 'Edit Property',
         icon: <ApartmentIcon />,
         element: <EditDialog mode="Edit" />
@@ -45,18 +67,21 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
       {
         path: 'new',
         label: 'Create new property',
+
         icon: <ApartmentIcon />,
         element: <EditDialog mode="New" />
       },
       {
         path: 'view/:id',
         label: 'View property',
+
         icon: <ApartmentIcon />,
         element: <EditDialog mode="View" />
       },
       {
         path: 'delete/:id',
         label: 'Delete property',
+
         icon: <ApartmentIcon />,
         element: <DeleteDialog />
       }

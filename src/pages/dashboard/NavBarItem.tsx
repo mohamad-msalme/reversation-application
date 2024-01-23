@@ -29,7 +29,7 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
     <ListItemButton
       component={Link}
       to={path}
-      selected={location.pathname === path}
+      selected={location.pathname === path || location.pathname.includes(path)}
     >
       <ListItemIcon
         sx={theme => ({
