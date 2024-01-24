@@ -3,7 +3,7 @@ import { Coockies } from '../../utils/Coockies'
 import { useNavigate } from 'react-router-dom'
 import { axiosInstance } from 'client/axiosInstance'
 import { AxiosResponse } from 'axios'
-import { UseMutationOptions, useMutation } from 'react-query'
+import { UseMutationOptions, useMutation, useQueryClient } from 'react-query'
 
 export const logout = async () => {
   try {
@@ -22,10 +22,12 @@ export const useLogout = (
     unknown
   > = {}
 ) => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { mutateAsync } = useMutation(logout, {
     ...options,
     onSuccess: async (...params) => {
+      await queryClient.invalidateQueries()
       await options?.onSuccess?.(...params)
       Coockies.removeUserInfo()
       navigate('/login')

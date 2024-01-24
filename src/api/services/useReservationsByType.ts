@@ -2,6 +2,7 @@ import { useQuery } from 'react-query'
 import { axiosInstance } from 'client/axiosInstance'
 import { useGetProperties } from './useGetProperties'
 import {
+  Reservation,
   ReservationsType,
   SuccessReserveationArrivalsResponse
 } from 'models/Reservation'
@@ -27,7 +28,7 @@ export const useReservationsByType = (type: ReservationsType) => {
     data: properties,
     isSuccess,
     isLoading: loadingProperties
-  } = useGetProperties()
+  } = useGetProperties({ suspense: true })
 
   const { data: reservations, isLoading: loadingReservations } = useQuery(
     ['useReservationsByType', type],
@@ -37,16 +38,17 @@ export const useReservationsByType = (type: ReservationsType) => {
       select: reservations => {
         return reservations.map(reservation => ({
           ...reservation,
-          reservation: properties!.find(
+          property: (properties || [])!.find(
             property => property._id === reservation.propertyId
           )
         }))
-      }
+      },
+      suspense: true
     }
   )
 
   return {
-    data: reservations,
+    data: (reservations || []) as Reservation[],
     isLoading: loadingProperties || loadingReservations
   }
 }

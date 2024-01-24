@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Home from 'pages/dashboard/home'
 import HomeIcon from '@mui/icons-material/Home'
 import Property from 'pages/dashboard/property'
 import EditDialog from 'pages/dashboard/property/components/EditDialog'
@@ -8,7 +7,8 @@ import Reservation from 'pages/dashboard/reservation'
 import DeleteDialog from 'pages/dashboard/property/components/DeleteDialog'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import EditCalendarIcon from '@mui/icons-material/EditCalendar'
-import { HomeCards } from 'pages/dashboard/home/HomeCards'
+import HomeLayout from 'pages/dashboard/home/HomeLayout'
+import { HomePage } from 'pages/dashboard/home/HomePage'
 
 export type TPROTECTED_PAGES = {
   path: string
@@ -23,23 +23,23 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     path: '/home',
     label: 'Home',
     icon: <HomeIcon />,
-    element: <Home />,
+    element: <HomeLayout />,
     children: [
       {
         path: 'arrivals',
-        element: <HomeCards title="Arrivals" type="arrivals" />,
+        element: <HomePage title="Arrivals" type="arrivals" />,
         icon: <HomeIcon />,
         label: 'Arrivals'
       },
       {
         path: 'departure',
-        element: <HomeCards title="Departure" type="departures" />,
+        element: <HomePage title="Departure" type="departures" />,
         icon: <HomeIcon />,
         label: 'Departure'
       },
       {
         path: 'staysover',
-        element: <HomeCards title="Stays-over" type="stayovers" />,
+        element: <HomePage title="Stays over" type="stayovers" />,
         icon: <HomeIcon />,
         label: 'Stays-over'
       }

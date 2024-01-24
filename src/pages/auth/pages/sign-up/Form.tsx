@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button, FormGroup, InputAdornment, TextField } from '@mui/material'
+import { useSuccessAuth } from 'services/useSuccessAuth'
 
 export const Form: React.FC = () => {
   const {
@@ -19,7 +20,7 @@ export const Form: React.FC = () => {
   } = useForm<SignUpFormType>({
     resolver: zodResolver(SignUpSchema)
   })
-
+  const successAuth = useSuccessAuth()
   const { mutateAsync } = useSignup()
 
   const onSubmit: SubmitHandler<SignUpFormType> = async ({
@@ -27,8 +28,9 @@ export const Form: React.FC = () => {
     password
   }) => {
     try {
-      await mutateAsync({ email, password })
+      const user = await mutateAsync({ email, password })
       reset()
+      successAuth(user)
     } catch (error) {
       console.log(error)
     }

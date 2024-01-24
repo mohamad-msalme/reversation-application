@@ -7,7 +7,7 @@
       [col-start] 1fr [col-end]
     )
     [full-end] minmax(2vw, 4vw);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 64px calc(100vh - 64px);
 }
 
 .header {
@@ -25,7 +25,12 @@
   border-radius: 10px;
   box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
   padding: 4vh 2vw;
+  overflow-y: auto;
   &.main--dark {
     background-color: #ffffff17;
   }
+}
+
+body {
+  overflow: hidden;
 }

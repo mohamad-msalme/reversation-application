@@ -39,14 +39,14 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
     setValue,
     reset,
     watch,
-    formState: { isSubmitting }
+    formState: { isSubmitting, errors }
   } = useForm<PropertyForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     resolver: zodResolver(PropertyFormSchema),
     defaultValues: data ?? {}
   })
-
+  console.log(errors)
   const { mutateAsync } = useSaveProperties(id)
 
   const onSubmit: SubmitHandler<PropertyForm> = async data => {

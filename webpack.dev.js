@@ -17,7 +17,7 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 3002,
+    port: 3000,
     proxy: {
       '/api': {
         target: 'https://www.modernlock-dev.biz/api', // Target server (your API server)

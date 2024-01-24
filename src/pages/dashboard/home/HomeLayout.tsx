@@ -1,12 +1,12 @@
-import { Tab, Tabs } from '@mui/material'
 import React from 'react'
+import { Tab, Tabs } from '@mui/material'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
-const Home: React.FC = () => {
+const HomeLayout: React.FC = () => {
   const navigate = useNavigate()
-  const [_isPending, startTransition] = React.useTransition()
+  const [, startTransition] = React.useTransition()
   const [value, setValue] = React.useState(0)
-  console.log(_isPending)
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     startTransition(() => {
       setValue(newValue)
@@ -29,4 +29,4 @@ const Home: React.FC = () => {
   )
 }
 
-export default Home
+export default HomeLayout
