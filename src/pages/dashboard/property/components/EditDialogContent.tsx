@@ -19,12 +19,15 @@ import {
   Theme,
   useMediaQuery
 } from '@mui/material'
+import { useOutletContext } from 'react-router'
+import { PropertyOutletContext } from '..'
 
 export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
   mode,
   id,
   handelCancel
 }) => {
+  const { showNotification } = useOutletContext<PropertyOutletContext>()
   const enabled = Boolean(id)
   const disabled = mode === 'View'
   const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'))
@@ -39,22 +42,24 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
     setValue,
     reset,
     watch,
-    formState: { isSubmitting, errors }
+    formState: { isSubmitting }
   } = useForm<PropertyForm>({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     resolver: zodResolver(PropertyFormSchema),
     defaultValues: data ?? {}
   })
-  console.log(errors)
   const { mutateAsync } = useSaveProperties(id)
 
   const onSubmit: SubmitHandler<PropertyForm> = async data => {
     try {
       await mutateAsync(data)
+      showNotification('Success', 'success')
       reset()
       handelCancel()
     } catch (error) {
+      const _error = error as { message: string }
+      showNotification(_error.message, 'error')
       //
     }
   }

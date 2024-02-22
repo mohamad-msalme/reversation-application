@@ -22,8 +22,10 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
   menuState,
   icon
 }) => {
-  const isMobile =
+  const isTablet =
     useMediaQuery<Theme>(theme => theme.breakpoints.down('md')) || menuState
+  const isMobile =
+    useMediaQuery<Theme>(theme => theme.breakpoints.down('sm')) || menuState
   const location = useLocation()
   const Item = (
     <ListItemButton
@@ -33,8 +35,8 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
     >
       <ListItemIcon
         sx={theme => ({
-          justifyContent: isMobile ? 'center' : 'normal',
-          minWidth: isMobile ? 'fit-content' : '56px',
+          justifyContent: isMobile ? 'normal' : isTablet ? 'center' : 'normal',
+          minWidth: isMobile ? '56px' : isTablet ? 'fit-content' : '56px',
           color: theme.palette.primary.main
         })}
       >
@@ -42,7 +44,7 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
       </ListItemIcon>
       <ListItemText
         sx={{
-          display: isMobile ? 'none' : 'normal'
+          display: isMobile ? 'normal' : isTablet ? 'none' : 'normal'
         }}
         primary={label}
       />
@@ -51,7 +53,7 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
 
   return (
     <ListItem key={path}>
-      {isMobile ? (
+      {isTablet && !isMobile ? (
         <Tooltip title={label} placement="right">
           {Item}
         </Tooltip>

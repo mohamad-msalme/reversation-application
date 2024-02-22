@@ -2,14 +2,15 @@
 import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 
-import { z } from 'zod'
 import { Coockies } from 'utils/Coockies'
+import { FormAlert } from '../FormAlert'
 import { useSignin } from 'services/useSignin'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSuccessAuth } from 'services/useSuccessAuth'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SignInFormType, SignInSchema } from 'schemas/index'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import {
   Button,
@@ -22,18 +23,20 @@ import {
 } from '@mui/material'
 
 export const Form: React.FC = () => {
+  const [errMsg, setErroMsg] = React.useState('')
   const navigate = useNavigate()
   const { mutateAsync } = useSignin()
   const successAuth = useSuccessAuth()
+  const { passwordType, endAdornment } = useVisiblePassword()
   const {
+    control,
     handleSubmit,
     register,
     reset,
     watch,
-    formState: { errors, isSubmitting }
+    formState: { isSubmitting }
   } = useForm<SignInFormType>({
-    resolver: zodResolver(SignInSchema),
-    defaultValues: Coockies.getUserCradintional()
+    resolver: zodResolver(SignInSchema)
   })
 
   const onSubmit: SubmitHandler<SignInFormType> = async ({
@@ -43,13 +46,15 @@ export const Form: React.FC = () => {
     try {
       const result = await mutateAsync(rest)
       if (rememberMe) Coockies.updateUserCradintional({ ...rest, rememberMe })
+      setErroMsg('')
       successAuth(result)
       reset()
     } catch (error) {
-      //
+      const _error = error as { message: string }
+      setErroMsg(_error.message)
     }
   }
-  const { passwordType, endAdornment } = useVisiblePassword()
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormGroup
@@ -57,41 +62,48 @@ export const Form: React.FC = () => {
           rowGap: theme.spacing(4)
         })}
       >
-        <TextField
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="start">
-                <EmailIcon />
-              </InputAdornment>
-            )
-          }}
-          variant="filled"
-          fullWidth
-          label="Email"
-          {...register('email')}
+        <Controller
           name="email"
-          type="email"
-          placeholder="enter email..."
-          error={Boolean(errors.email)}
-          helperText={errors.email?.message}
-        >
-          Email
-        </TextField>
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                )
+              }}
+              variant="filled"
+              fullWidth
+              label="Email"
+              {...field}
+              type="email"
+              placeholder="json@gmail.com"
+              error={Boolean(error?.message)}
+              helperText={error?.message ?? ''}
+            />
+          )}
+        />
 
-        <TextField
-          {...register('password')}
+        <Controller
           name="password"
-          placeholder="enter password..."
-          variant="filled"
-          fullWidth
-          label="Password"
-          type={passwordType}
-          InputProps={{ endAdornment }}
-          error={Boolean(errors.password)}
-          helperText={errors.password?.message}
-        >
-          Password
-        </TextField>
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              InputProps={{ endAdornment }}
+              placeholder="123456"
+              variant="filled"
+              fullWidth
+              label="Password"
+              type={passwordType}
+              {...field}
+              error={Boolean(error?.message)}
+              helperText={error?.message ?? ''}
+            />
+          )}
+        />
+
         <FormGroup
           row
           sx={{
@@ -115,6 +127,7 @@ export const Form: React.FC = () => {
             Forget password?
           </Link>
         </FormGroup>
+        <FormAlert severity="error">{errMsg}</FormAlert>
         <Button
           disabled={isSubmitting}
           type="submit"
@@ -128,26 +141,3 @@ export const Form: React.FC = () => {
     </form>
   )
 }
-
-export const SignInSchema = z.object({
-  email: z
-    .string({
-      required_error: 'Email is required',
-      invalid_type_error: 'Email must be a string'
-    })
-    .min(1, {
-      message: 'Email is required'
-    })
-    .email({
-      message: 'Invalid email address'
-    }),
-  password: z
-    .string()
-    .min(1, {
-      message: 'Password is required'
-    })
-    .min(6, 'Invalid Password Should be greater than 6 char'),
-  rememberMe: z.boolean()
-})
-
-export type SignInFormType = z.infer<typeof SignInSchema>

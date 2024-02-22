@@ -31,7 +31,8 @@
       "providers/*": ["src/providers/*"],
       "theme/*": ["src/theme/*"],
       "constants/*": ["src/constants/*"],
-      "utils/*": ["src/utils/*"]
+      "utils/*": ["src/utils/*"],
+      "schemas/*": ["src/schemas/*"]
     }
   },
 

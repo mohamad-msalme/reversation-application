@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import cookies from 'js-cookie'
 import { User } from 'models/User'
-import { SignInFormType } from 'pages/auth/pages/sign-in/Form'
+import { SignInFormType } from 'src/schemas'
 
 export class Coockies {
   static updateUserInfo(userInfo: string): void {
@@ -32,15 +32,25 @@ export class Coockies {
     cookies.remove('user-cradintional')
   }
 
-  static getUserCradintional(): SignInFormType | undefined {
+  static getUserCradintional(): SignInFormType {
     const userCradintional = cookies.get('user-cradintional')
     try {
       const parsedVal = userCradintional
         ? (JSON.parse(userCradintional) as SignInFormType)
         : undefined
-      return parsedVal
+      return (
+        parsedVal ?? {
+          email: '',
+          password: '',
+          rememberMe: false
+        }
+      )
     } catch (error) {
-      return undefined
+      return {
+        email: '',
+        password: '',
+        rememberMe: false
+      }
     }
   }
 }

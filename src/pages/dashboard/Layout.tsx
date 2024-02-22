@@ -16,7 +16,7 @@ export const DashboardLayout: React.FC = () => {
         <Header menuState={menuIcon} onMenuClick={setMenuIcon} />
       </Box>
       <Box className="nav-bar">
-        <NavBar menuState={menuIcon} />
+        <NavBar onMenuClick={setMenuIcon} menuState={menuIcon} />
       </Box>
       <Box
         className={clsx('main', {

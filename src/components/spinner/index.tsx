@@ -1,18 +1,26 @@
 import React from 'react'
-import clsx from 'clsx'
-import { CircularProgress, CircularProgressProps } from '@mui/material'
+import {
+  Backdrop,
+  BackdropProps,
+  CircularProgress,
+  CircularProgressProps
+} from '@mui/material'
 import './index.scss'
 
 type TSpinner = {
   circularProgressProps?: CircularProgressProps
-  boxClassName?: string
+  backdropProps?: BackdropProps
 }
 
 export const Spinner: React.FC<TSpinner> = ({
   circularProgressProps,
-  boxClassName
+  backdropProps
 }) => (
-  <div className={clsx('spinner', boxClassName)}>
-    <CircularProgress {...circularProgressProps} />
-  </div>
+  <Backdrop
+    sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+    open={true}
+    {...backdropProps}
+  >
+    <CircularProgress color="inherit" {...circularProgressProps} />
+  </Backdrop>
 )

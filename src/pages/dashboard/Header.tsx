@@ -3,7 +3,6 @@ import { ThemeMode } from 'components/theme-mode'
 import { AccountMenu } from './AccountMenu'
 import {
   AppBar,
-  Badge,
   Box,
   IconButton,
   Theme,
@@ -11,7 +10,6 @@ import {
   useMediaQuery
 } from '@mui/material'
 
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import MenuIcon from '@mui/icons-material/Menu'
 
 type THeader = {
@@ -30,19 +28,14 @@ export const Header: React.FC<THeader> = ({ onMenuClick, menuState }) => {
           edge="start"
           sx={{
             transition: 'all 0.4s',
-            opacity: isMobile ? 0 : 1,
-            pointerEvents: isMobile ? 'none' : 'all '
+            opacity: !isMobile ? 0 : 1,
+            pointerEvents: !isMobile ? 'none' : 'all '
           }}
         >
           <MenuIcon />
         </IconButton>
         <Box display="flex" alignItems="center" columnGap={1} ml="auto">
           <ThemeMode />
-          <IconButton>
-            <Badge badgeContent={4} color="info">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <AccountMenu />
         </Box>
       </Toolbar>

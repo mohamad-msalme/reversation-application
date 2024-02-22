@@ -1,6 +1,6 @@
-import { AxiosResponse } from 'axios'
 import { axiosInstance } from 'client/axiosInstance'
 import { useGetProperties } from './useGetProperties'
+import { isAxiosError, AxiosResponse } from 'axios'
 import { UseMutationOptions, useMutation } from 'react-query'
 
 const postDeleteProperties = async (id: string) => {
@@ -8,7 +8,15 @@ const postDeleteProperties = async (id: string) => {
     const data = await axiosInstance.delete(`/properties/${id}`)
     return data
   } catch (error) {
-    //
+    let message = 'Somthing went wrong, please try again'
+    if (
+      isAxiosError<{ errors: [{ message: string }] }>(error) &&
+      error.response?.data.errors &&
+      error.response?.data.errors.length > 0
+    ) {
+      message = error.response.data.errors[0].message
+    }
+    throw Error(message)
   }
 }
 

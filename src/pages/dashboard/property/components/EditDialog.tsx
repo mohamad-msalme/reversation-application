@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { Loading } from '../Loading'
 import { EditDialogContent } from './EditDialogContent'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import {
   DialogTitle,
   IconButton,
@@ -14,6 +14,8 @@ import {
 } from '@mui/material'
 
 const EditDialog: React.FC<TDialog> = ({ mode }) => {
+  const outleContext = useOutletContext()
+  console.log({ EditDialog: outleContext })
   const { id } = useParams()
   const navigate = useNavigate()
   const closeDialog = () => navigate('/property')

@@ -12,6 +12,7 @@ const COL_DEF: GridColDef<Property> = {
   headerAlign: 'center',
   align: 'center',
   flex: 1,
+  minWidth: 150,
   filterable: false
 }
 export const useTableColumns = () => {
