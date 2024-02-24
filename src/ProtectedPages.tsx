@@ -11,7 +11,6 @@ import { HomePage } from 'pages/dashboard/home/HomePage'
 import EditDialog from 'pages/dashboard/property/components/EditDialog'
 import Reservation from 'pages/dashboard/reservation'
 import { RouteObject } from 'react-router-dom'
-import { ReservationsTypeQuery } from 'services/reservationsByType'
 import { QueryClient } from '@tanstack/react-query'
 
 export type TPROTECTED_PAGES = {
@@ -35,12 +34,7 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
         element: <HomePage title="Arrivals" type="arrivals" />,
         icon: <HomeIcon />,
         label: 'Arrivals',
-        loader: async () => {
-          queryClient.prefetchQuery(ReservationsTypeQuery('departures'))
-          queryClient.prefetchQuery(ReservationsTypeQuery('stayovers'))
-          const data = await HomeLayout.loader(queryClient, 'arrivals')
-          return data
-        }
+        loader: HomeLayout.loader.bind(undefined, queryClient, 'arrivals')
       },
       {
         path: '/home/departure',
