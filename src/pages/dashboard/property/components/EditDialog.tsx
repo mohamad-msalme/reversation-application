@@ -2,9 +2,10 @@ import React from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 
+import { loader } from './loader'
 import { Loading } from '../Loading'
+import { useNavigate } from 'react-router-dom'
 import { EditDialogContent } from './EditDialogContent'
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import {
   DialogTitle,
   IconButton,
@@ -13,13 +14,11 @@ import {
   useMediaQuery
 } from '@mui/material'
 
-const EditDialog: React.FC<TDialog> = ({ mode }) => {
-  const outleContext = useOutletContext()
-  console.log({ EditDialog: outleContext })
-  const { id } = useParams()
+const EditDialog = ({ mode }: TDialog) => {
   const navigate = useNavigate()
   const closeDialog = () => navigate('/property')
   const fullScreen = useMediaQuery<Theme>(theme => theme.breakpoints.down('sm'))
+
   return (
     <MuiDialog
       fullWidth
@@ -42,7 +41,7 @@ const EditDialog: React.FC<TDialog> = ({ mode }) => {
         <CloseIcon />
       </IconButton>
       <React.Suspense fallback={<Loading />}>
-        <EditDialogContent mode={mode} id={id} handelCancel={closeDialog} />
+        <EditDialogContent mode={mode} handelCancel={closeDialog} />
       </React.Suspense>
     </MuiDialog>
   )
@@ -53,5 +52,5 @@ export type TMode = 'Edit' | 'View' | 'New'
 type TDialog = {
   mode: TMode
 }
-
+EditDialog.loader = loader
 export default EditDialog

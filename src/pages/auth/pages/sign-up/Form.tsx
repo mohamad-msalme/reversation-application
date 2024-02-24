@@ -4,14 +4,15 @@ import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 import PersonIcon from '@mui/icons-material/Person'
 
-import { useSignup } from 'services/useSignup'
+import { FormAlert } from 'components/form-alert'
+import { useMutation } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSuccessAuth } from 'services/useSuccessAuth'
+import { useSuccessAuth } from 'hooks/useSuccessAuth'
+import { signupMutation } from 'services/signup'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SignUpFormType, SignUpSchema } from 'schemas/index'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, FormGroup, InputAdornment, TextField } from '@mui/material'
-import { FormAlert } from '../FormAlert'
 
 export const Form: React.FC = () => {
   const [errMsg, setErroMsg] = React.useState('')
@@ -25,14 +26,14 @@ export const Form: React.FC = () => {
     resolver: zodResolver(SignUpSchema)
   })
   const successAuth = useSuccessAuth()
-  const { mutateAsync } = useSignup()
+  const { mutateAsync } = useMutation(signupMutation())
   const onSubmit: SubmitHandler<SignUpFormType> = async ({
     email,
     password
   }) => {
     try {
-      const user = await mutateAsync({ email, password })
       setErroMsg('')
+      const user = await mutateAsync({ email, password })
       reset()
       successAuth(user)
     } catch (error) {

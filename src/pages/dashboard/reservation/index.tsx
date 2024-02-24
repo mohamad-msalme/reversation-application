@@ -1,7 +1,9 @@
 import React from 'react'
 import ApartmentIcon from '@mui/icons-material/Apartment'
+import { Loading } from './Loading'
 import { Property } from 'models/Property'
-import { useGetProperties } from 'services/useGetProperties'
+import { useQuery } from '@tanstack/react-query'
+import { PropertiesQuery } from 'services/fetchProperties'
 import {
   Autocomplete,
   ListItem,
@@ -10,12 +12,10 @@ import {
   MenuItem,
   TextField
 } from '@mui/material'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
+const CalendarComponent = React.lazy(() => import('./CalendarComponent'))
 const Reservation: React.FC = () => {
-  const { data } = useGetProperties()
+  const { data } = useQuery(PropertiesQuery())
 
   const [property, setProperty] = React.useState<Property | null>(
     data ? data[0] : null
@@ -24,6 +24,7 @@ const Reservation: React.FC = () => {
   return (
     <div
       style={{
+        position: 'relative',
         display: 'grid',
         rowGap: '2rem',
         gridTemplateRows: 'max-content 1fr',
@@ -52,12 +53,9 @@ const Reservation: React.FC = () => {
         sx={{ width: 300, borderRadius: 10 }}
         renderInput={params => <TextField {...params} label="Property" />}
       />
-      <Calendar
-        views={['month', 'week']}
-        localizer={localizer}
-        startAccessor="start"
-        endAccessor="end"
-      />
+      <React.Suspense fallback={<Loading />}>
+        <CalendarComponent />
+      </React.Suspense>
     </div>
   )
 }

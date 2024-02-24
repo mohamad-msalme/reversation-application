@@ -1,26 +1,29 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 
 import { Table } from './components/Table'
 import { Outlet } from 'react-router-dom'
+import { loader } from './loader'
 import { Toolbar } from './components/Toolbar'
+import { AlertProps } from '@mui/material'
+import { useNotification } from 'hooks/useNotification'
 import { useSelectionModel } from './hooks/useSelectionModel'
 import './index.scss'
 
-import { AlertProps } from '@mui/material'
-import { useNotification } from 'hooks/useNotification'
 export type PropertyOutletContext = {
   showNotification: (msg: string, severity: AlertProps['severity']) => void
 }
 
-const Property: React.FC = () => {
-  const [selectionModel, setSelectionModel] = useSelectionModel()
+const Property = () => {
   const [Notification, showNotification] = useNotification()
+  const [selectionModel, setSelectionModel] = useSelectionModel()
   return (
     <div className="property">
       <Toolbar selectionModel={selectionModel} />
       <Table
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
+        showNotification={showNotification}
       />
       <Outlet
         context={{
@@ -31,5 +34,5 @@ const Property: React.FC = () => {
     </div>
   )
 }
-
+Property.loader = loader
 export default Property

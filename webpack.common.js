@@ -6,7 +6,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js',
-    clean: true,
     assetModuleFilename: 'assets/images/[name][ext]'
   },
   resolve: {

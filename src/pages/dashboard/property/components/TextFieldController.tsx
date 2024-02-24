@@ -6,20 +6,18 @@ import { Control, Controller } from 'react-hook-form'
 type TTextFieldController = {
   fieldName: keyof PropertyForm | 'address.country' | 'address.city'
   label: string
-  disabled: boolean
+  disabled?: boolean
   control: Control<PropertyForm>
 }
 export const TextFieldController: React.FC<TTextFieldController> = ({
   fieldName,
   label,
-  disabled,
   control
 }) => {
   return (
     <Controller
       name={fieldName}
       control={control}
-      disabled={disabled}
       render={({ field: { ref, ...field }, fieldState: { error } }) => (
         <TextField
           sx={{

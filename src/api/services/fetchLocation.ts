@@ -1,10 +1,15 @@
-import { useQuery } from 'react-query'
 import { axiosInstance } from 'client/axiosInstance'
 
 type TCoord = {
   lat: number
   lng: number
 }
+
+export const LocationQuery = ({ lat, lng }: TCoord) => ({
+  queryKey: ['LocationQuery', lat, lng],
+  queryFn: async () => fetchLocation({ lat, lng })
+})
+
 const fetchLocation = async ({ lat, lng }: TCoord) => {
   try {
     const data = await axiosInstance.get<{ display_name: string }>(
@@ -17,14 +22,6 @@ const fetchLocation = async ({ lat, lng }: TCoord) => {
     return data.data.display_name
   } catch (error) {
     //
+    console.log(error)
   }
 }
-
-export const useFetchLocation = (coord: TCoord) =>
-  useQuery(
-    ['useFetchLocation', coord.lat, coord.lng],
-    fetchLocation.bind(undefined, coord),
-    {
-      enabled: Boolean(coord?.lat) && Boolean(coord?.lng)
-    }
-  )

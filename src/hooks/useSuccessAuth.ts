@@ -6,7 +6,7 @@ export const useSuccessAuth = () => {
   const navigation = useNavigate()
   return (data: User) => {
     Coockies.updateUserInfo(JSON.stringify(data))
-    navigation('/home', {
+    navigation('/home/arrivals', {
       state: 'fromAuth'
     })
     return true

@@ -1,5 +1,6 @@
 import React from 'react'
-import { useIsAuth } from 'services/useIsAuth'
+import { IsAuthQuery } from 'services/isAuth'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 interface ProtectedRouteProps {
   authenticatedElement: React.ReactNode
@@ -10,6 +11,8 @@ export const ProtectedRoute = ({
   authenticatedElement,
   unauthenticatedElement
 }: ProtectedRouteProps) => {
-  const isAuthinicated = useIsAuth()
+  const { isSuccess: isAuthinicated } = useSuspenseQuery({
+    ...IsAuthQuery()
+  })
   return isAuthinicated ? authenticatedElement : unauthenticatedElement
 }

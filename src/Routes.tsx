@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <ProtectedRoute
-        authenticatedElement={<Navigate to={'/home'} />}
+        authenticatedElement={<Navigate to={'/home/arrivals'} />}
         unauthenticatedElement={<Navigate to={'/login'} />}
       />
     ),
@@ -46,8 +46,9 @@ export const router = createBrowserRouter([
         unauthenticatedElement={<Navigate to={'/login'} />}
       />
     ),
-    children: PROTECTED_PAGES.map(({ path, element, children }) => ({
+    children: PROTECTED_PAGES.map(({ path, loader, element, children }) => ({
       path,
+      loader,
       element: element,
       children: children
     }))

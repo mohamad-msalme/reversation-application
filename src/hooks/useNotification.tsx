@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { Alert, AlertProps, Slide, SlideProps } from '@mui/material'
 
 export interface SnackbarMessage {
-  message: string
+  message: React.ReactNode
   key: number
 }
 
@@ -14,18 +14,19 @@ const SlideTransition = (props: SlideProps) => (
 )
 
 export const useNotification = () => {
-  const msgRef = React.useRef('')
+  const msgRef = React.useRef<React.ReactNode>()
   const keyRef = React.useRef(new Date().getTime())
   const [open, setOpen] = React.useState(false)
   const refSeverity = React.useRef<AlertProps['severity']>('success')
-  const handleClick = (msg: string, severity: AlertProps['severity']) => {
-    refSeverity.current = severity
-    msgRef.current = msg
-    if (open) {
+  const handleClick = React.useCallback(
+    (msg: string, severity: AlertProps['severity']) => {
+      refSeverity.current = severity
+      msgRef.current = msg
       keyRef.current = new Date().getTime()
-    }
-    setOpen(true)
-  }
+      setOpen(true)
+    },
+    []
+  )
 
   const handleClose = React.useCallback(
     (e: React.SyntheticEvent | Event, reason?: string) => {
@@ -50,6 +51,8 @@ export const useNotification = () => {
     ),
     [handleClose]
   )
+
+  console.log({ open })
 
   const Notification = React.useCallback<
     React.FC<{ alertProps?: AlertProps; snackbarProps?: SnackbarProps }>

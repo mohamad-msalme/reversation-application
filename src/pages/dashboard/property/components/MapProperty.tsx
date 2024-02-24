@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
+import { TMode } from './EditDialog'
+import { useQuery } from '@tanstack/react-query'
 import { PropertyForm } from './PropertyFormSchema'
+import { LocationQuery } from 'services/fetchLocation'
 import { LatLngExpression } from 'leaflet'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import {
@@ -10,8 +13,6 @@ import {
   TileLayer,
   useMapEvents
 } from 'react-leaflet'
-import { useFetchLocation } from 'services/useFetchLocation'
-import { TMode } from './EditDialog'
 
 const MapEvents: React.FC<Omit<TMapProperty, 'watch'>> = ({
   id,
@@ -46,28 +47,25 @@ const MapEvents: React.FC<Omit<TMapProperty, 'watch'>> = ({
   return null
 }
 
-type TMapProperty = {
+export type TMapProperty = {
   id?: string
   setValue: UseFormSetValue<PropertyForm>
   watch: UseFormWatch<PropertyForm>
   mode: TMode
 }
 
-export const MapProperty: React.FC<TMapProperty> = ({
-  id,
-  setValue,
-  watch,
-  mode
-}) => {
+const MapProperty: React.FC<TMapProperty> = ({ id, setValue, watch, mode }) => {
   const value = watch('address')
   const coords: LatLngExpression = value
     ? [Number(value.city), Number(value.country)]
     : [51.505, -0.09]
 
-  const { data } = useFetchLocation({
-    lng: coords[1],
-    lat: coords[0]
-  })
+  const { data } = useQuery(
+    LocationQuery({
+      lng: coords[1],
+      lat: coords[0]
+    })
+  )
 
   return (
     <MapContainer
@@ -89,3 +87,4 @@ export const MapProperty: React.FC<TMapProperty> = ({
     </MapContainer>
   )
 }
+export default MapProperty

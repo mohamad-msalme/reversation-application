@@ -21,6 +21,6 @@ export const Spinner: React.FC<TSpinner> = ({
     open={true}
     {...backdropProps}
   >
-    <CircularProgress color="inherit" {...circularProgressProps} />
+    <CircularProgress color="primary" {...circularProgressProps} />
   </Backdrop>
 )

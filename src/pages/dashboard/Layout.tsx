@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from './Header'
 import { NavBar } from './NavBar'
 import { Outlet } from 'react-router-dom'
-import { Box, Theme, useTheme } from '@mui/material'
+import { Backdrop, Box, CircularProgress, Theme, useTheme } from '@mui/material'
 
 import './layout.scss'
 import clsx from 'clsx'
@@ -23,7 +23,28 @@ export const DashboardLayout: React.FC = () => {
           'main--dark': isDark
         })}
       >
-        <Outlet />
+        <React.Suspense
+          fallback={
+            <div
+              style={{
+                width: '100%',
+                height: '100%'
+              }}
+            >
+              <Backdrop
+                sx={{
+                  color: '#fff',
+                  zIndex: theme => theme.zIndex.drawer + 1
+                }}
+                open
+              >
+                <CircularProgress color="primary" />
+              </Backdrop>
+            </div>
+          }
+        >
+          <Outlet />
+        </React.Suspense>
       </Box>
     </Box>
   )

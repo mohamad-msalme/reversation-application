@@ -30,8 +30,11 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
   const Item = (
     <ListItemButton
       component={Link}
-      to={path}
-      selected={location.pathname === path || location.pathname.includes(path)}
+      to={path ?? '/home/arrivals'}
+      selected={
+        location.pathname === path ||
+        location.pathname.includes(path ?? '/home/arrivals')
+      }
     >
       <ListItemIcon
         sx={theme => ({

@@ -1,11 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
+import { Reservation } from 'models/Reservation'
 import { HomePageProps } from './HomePage'
 import { ReservationCard } from './reservation-card/ReservationCard'
+import { PropertyOutletContext } from '../property'
 import { Box, CardContent, Typography } from '@mui/material'
-import { useReservationsByType } from 'services/useReservationsByType'
+import { useLoaderData, useOutletContext } from 'react-router-dom'
 
 export const ReservationCards: React.FC<HomePageProps> = ({ type, title }) => {
-  const { data } = useReservationsByType(type)
+  const { showNotification } = useOutletContext<PropertyOutletContext>()
+  const { data, success } = useLoaderData() as {
+    data: Reservation[]
+    success: boolean
+  }
+
+  React.useMemo(
+    () => !success && showNotification(`Error fetch ${type}`, 'error'),
+    [type]
+  )
 
   if (data.length === 0) {
     return (

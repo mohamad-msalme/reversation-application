@@ -1,9 +1,8 @@
 /* eslint-disable no-useless-catch */
 import { Coockies } from '../../utils/Coockies'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 import { axiosInstance } from 'client/axiosInstance'
-import { AxiosResponse } from 'axios'
-import { UseMutationOptions, useMutation, useQueryClient } from 'react-query'
 
 export const logout = async () => {
   try {
@@ -14,21 +13,12 @@ export const logout = async () => {
   }
 }
 
-export const useLogout = (
-  options: UseMutationOptions<
-    AxiosResponse<unknown, unknown>,
-    unknown,
-    void,
-    unknown
-  > = {}
-) => {
-  const queryClient = useQueryClient()
+export const useLogout = () => {
   const navigate = useNavigate()
-  const { mutateAsync } = useMutation(logout, {
-    ...options,
-    onSuccess: async (...params) => {
-      await queryClient.invalidateQueries()
-      await options?.onSuccess?.(...params)
+  const { mutateAsync } = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: logout,
+    onSuccess: () => {
       Coockies.removeUserInfo()
       navigate('/login')
     }

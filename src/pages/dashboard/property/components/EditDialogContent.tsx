@@ -4,13 +4,16 @@ import SaveIcon from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
 
 import { TMode } from './EditDialog'
+import { Property } from 'models/Property'
+import { useQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MapProperty } from './MapProperty'
-import { useGetProperty } from 'services/useGetProperty'
+import { PropertyQuery } from 'services/fetchProperty'
 import { useSaveProperties } from 'services/useSaveProperties'
 import { TextFieldController } from './TextFieldController'
+import { PropertyOutletContext } from '..'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { PropertyForm, PropertyFormSchema } from './PropertyFormSchema'
+import { useLoaderData, useOutletContext, useParams } from 'react-router-dom'
 import {
   Button,
   DialogActions,
@@ -19,21 +22,28 @@ import {
   Theme,
   useMediaQuery
 } from '@mui/material'
-import { useOutletContext } from 'react-router'
-import { PropertyOutletContext } from '..'
+
+const MapProperty = React.lazy(() => import('./MapProperty'))
 
 export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
   mode,
-  id,
   handelCancel
 }) => {
-  const { showNotification } = useOutletContext<PropertyOutletContext>()
+  const { id } = useParams()
   const enabled = Boolean(id)
-  const disabled = mode === 'View'
+  const { showNotification } = useOutletContext<PropertyOutletContext>()
   const isMobile = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'))
-  const { data } = useGetProperty(id || '', {
+  const { success, initialData } = useLoaderData() as {
+    success: boolean
+    initialData: Property
+  }
+
+  const successRef = React.useRef(success)
+
+  const { data } = useQuery({
+    ...PropertyQuery(id ?? ''),
     enabled,
-    suspense: true
+    initialData
   })
 
   const {
@@ -47,7 +57,8 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
     mode: 'onBlur',
     reValidateMode: 'onBlur',
     resolver: zodResolver(PropertyFormSchema),
-    defaultValues: data ?? {}
+    defaultValues: data ?? {},
+    disabled: !success || mode === 'View'
   })
   const { mutateAsync } = useSaveProperties(id)
 
@@ -63,6 +74,12 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
       //
     }
   }
+
+  React.useEffect(() => {
+    if (!successRef.current) {
+      showNotification('Somthing went wrong, please try again', 'error')
+    }
+  }, [])
 
   return (
     <DialogContent>
@@ -80,19 +97,16 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
         >
           <TextFieldController
             control={control}
-            disabled={disabled}
             fieldName="name"
             label="Name"
           />
           <TextFieldController
             control={control}
-            disabled={disabled}
             fieldName="serialNumber"
             label="serial number"
           />
           <TextFieldController
             control={control}
-            disabled={disabled}
             fieldName="phone"
             label="phone"
           />
@@ -113,7 +127,7 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
               name="save"
               color="success"
               startIcon={<SaveIcon />}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !success}
             >
               Save
             </Button>
@@ -135,6 +149,5 @@ export const EditDialogContent: React.FC<React.PropsWithChildren<TForm>> = ({
 
 type TForm = {
   mode: TMode
-  id?: string
   handelCancel: () => void
 }

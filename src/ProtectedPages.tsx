@@ -1,47 +1,60 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React from 'react'
 
 import HomeIcon from '@mui/icons-material/Home'
 import Property from 'pages/dashboard/property'
-import EditDialog from 'pages/dashboard/property/components/EditDialog'
-import Reservation from 'pages/dashboard/reservation'
 import DeleteDialog from 'pages/dashboard/property/components/DeleteDialog'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import EditCalendarIcon from '@mui/icons-material/EditCalendar'
 import HomeLayout from 'pages/dashboard/home/HomeLayout'
 import { HomePage } from 'pages/dashboard/home/HomePage'
+import EditDialog from 'pages/dashboard/property/components/EditDialog'
+import Reservation from 'pages/dashboard/reservation'
+import { RouteObject } from 'react-router-dom'
+import { ReservationsTypeQuery } from 'services/reservationsByType'
+import { QueryClient } from '@tanstack/react-query'
 
 export type TPROTECTED_PAGES = {
-  path: string
+  path?: string
   label: string
   icon: React.ReactNode
   element?: React.ReactNode
   children?: TPROTECTED_PAGES[]
+  loader?: RouteObject['loader']
 }
 
+const queryClient = new QueryClient()
 export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
   {
-    path: '/home',
     label: 'Home',
     icon: <HomeIcon />,
     element: <HomeLayout />,
     children: [
       {
-        path: 'arrivals',
+        path: '/home/arrivals',
         element: <HomePage title="Arrivals" type="arrivals" />,
         icon: <HomeIcon />,
-        label: 'Arrivals'
+        label: 'Arrivals',
+        loader: async () => {
+          queryClient.prefetchQuery(ReservationsTypeQuery('departures'))
+          queryClient.prefetchQuery(ReservationsTypeQuery('stayovers'))
+          const data = await HomeLayout.loader(queryClient, 'arrivals')
+          return data
+        }
       },
       {
-        path: 'departure',
+        path: '/home/departure',
         element: <HomePage title="Departure" type="departures" />,
         icon: <HomeIcon />,
-        label: 'Departure'
+        label: 'Departure',
+        loader: HomeLayout.loader.bind(undefined, queryClient, 'departures')
       },
       {
-        path: 'staysover',
+        path: '/home/staysover',
         element: <HomePage title="Stays over" type="stayovers" />,
         icon: <HomeIcon />,
-        label: 'Stays-over'
+        label: 'Stays-over',
+        loader: HomeLayout.loader.bind(undefined, queryClient, 'stayovers')
       }
     ]
   },
@@ -56,27 +69,29 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     label: 'Property',
     icon: <ApartmentIcon />,
     element: <Property />,
+    loader: Property.loader.bind(undefined, queryClient),
     children: [
       {
         path: 'edit/:id',
 
         label: 'Edit Property',
         icon: <ApartmentIcon />,
-        element: <EditDialog mode="Edit" />
+        element: <EditDialog mode="Edit" />,
+        loader: EditDialog.loader(queryClient)
       },
       {
         path: 'new',
         label: 'Create new property',
-
+        loader: EditDialog.loader(queryClient),
         icon: <ApartmentIcon />,
         element: <EditDialog mode="New" />
       },
       {
         path: 'view/:id',
         label: 'View property',
-
         icon: <ApartmentIcon />,
-        element: <EditDialog mode="View" />
+        element: <EditDialog mode="View" />,
+        loader: EditDialog.loader(queryClient)
       },
       {
         path: 'delete/:id',

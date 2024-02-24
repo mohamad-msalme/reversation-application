@@ -1,13 +1,23 @@
 import { PropertyForm } from 'pages/dashboard/property/components/PropertyFormSchema'
-import { axiosInstance } from 'client/axiosInstance'
-import { useMutation, useQueryClient } from 'react-query'
 import { isAxiosError } from 'axios'
+import { axiosInstance } from 'client/axiosInstance'
+import { PropertyQuery } from './fetchProperty'
+import { PropertiesQuery } from './fetchProperties'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const postProperties = async (payload: PropertyForm) => {
   try {
     await axiosInstance.post('/properties', payload)
   } catch (error) {
-    //
+    let message = 'Somthing went wrong, please try again'
+    if (
+      isAxiosError<{ errors: [{ message: string }] }>(error) &&
+      error.response?.data.errors &&
+      error.response?.data.errors.length > 0
+    ) {
+      message = error.response.data.errors[0].message
+    }
+    throw Error(message)
   }
 }
 
@@ -32,36 +42,28 @@ export const patchProperties = async (payload: {
 
 export const useSaveProperties = (id?: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync: postAsync, ...post } = useMutation(
-    'postProperties',
-    postProperties
-  )
-  const { mutateAsync: patchAsync, ...patch } = useMutation(
-    'patchProperties',
-    patchProperties
-  )
+  const { mutateAsync: postAsync, ...post } = useMutation({
+    mutationKey: ['postProperties'],
+    mutationFn: postProperties
+  })
+  const { mutateAsync: patchAsync, ...patch } = useMutation({
+    mutationKey: ['patchProperties'],
+    mutationFn: patchProperties
+  })
 
   const save = async (payload: PropertyForm) => {
     if (id) {
-      await patchAsync(
-        { id, data: payload },
-        {
-          onSuccess: async () => {
-            await queryClient.invalidateQueries({
-              queryKey: ['useGetProperty', id]
-            })
-            await queryClient.invalidateQueries({
-              queryKey: ['useGetProperties']
-            })
-          }
-        }
-      )
+      await patchAsync({ id, data: payload }, {})
+      await queryClient.invalidateQueries({
+        queryKey: PropertyQuery(id).queryKey
+      })
+      await queryClient.invalidateQueries({
+        queryKey: PropertiesQuery().queryKey
+      })
     } else {
-      await postAsync(payload, {
-        onSuccess: async () =>
-          await queryClient.invalidateQueries({
-            queryKey: ['useGetProperties']
-          })
+      await postAsync(payload)
+      await queryClient.invalidateQueries({
+        queryKey: PropertiesQuery().queryKey
       })
     }
   }

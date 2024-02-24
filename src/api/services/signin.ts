@@ -1,16 +1,20 @@
-/* eslint-disable no-useless-catch */
 import { isAxiosError } from 'axios'
 import { axiosInstance } from 'client/axiosInstance'
-import { SuccessUserResponse, User } from 'models/User'
-import { UseMutationOptions, useMutation } from 'react-query'
+import { SuccessUserResponse } from 'models/User'
 
 type TVariables = {
   email: string
   password: string
 }
-export const signup = async ({ email, password }: TVariables) => {
+
+export const signinMutaion = () => ({
+  mutationKey: ['signinMutaion'],
+  mutationFn: async (variables: TVariables) => signin(variables)
+})
+
+export const signin = async ({ email, password }: TVariables) => {
   try {
-    const data = await axiosInstance.post<SuccessUserResponse>('/auth/signup', {
+    const data = await axiosInstance.post<SuccessUserResponse>('/auth/login', {
       email,
       password
     })
@@ -27,7 +31,3 @@ export const signup = async ({ email, password }: TVariables) => {
     throw Error(message)
   }
 }
-
-export const useSignup = (
-  options: UseMutationOptions<User, unknown, TVariables, unknown> = {}
-) => useMutation(signup, options)

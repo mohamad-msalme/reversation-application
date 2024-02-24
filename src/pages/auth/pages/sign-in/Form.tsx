@@ -3,11 +3,10 @@ import React from 'react'
 import EmailIcon from '@mui/icons-material/Email'
 
 import { Coockies } from 'utils/Coockies'
-import { FormAlert } from '../FormAlert'
-import { useSignin } from 'services/useSignin'
+import { FormAlert } from 'components/form-alert'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSuccessAuth } from 'services/useSuccessAuth'
+import { useSuccessAuth } from 'hooks/useSuccessAuth'
 import { useVisiblePassword } from '../../hooks/useVisiblePassword'
 import { SignInFormType, SignInSchema } from 'schemas/index'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -21,12 +20,14 @@ import {
   Link,
   TextField
 } from '@mui/material'
+import { useMutation } from '@tanstack/react-query'
+import { signinMutaion } from 'services/signin'
 
 export const Form: React.FC = () => {
-  const [errMsg, setErroMsg] = React.useState('')
   const navigate = useNavigate()
-  const { mutateAsync } = useSignin()
   const successAuth = useSuccessAuth()
+  const [errMsg, setErroMsg] = React.useState('')
+  const { mutateAsync } = useMutation(signinMutaion())
   const { passwordType, endAdornment } = useVisiblePassword()
   const {
     control,
@@ -44,9 +45,9 @@ export const Form: React.FC = () => {
     ...rest
   }) => {
     try {
+      setErroMsg('')
       const result = await mutateAsync(rest)
       if (rememberMe) Coockies.updateUserCradintional({ ...rest, rememberMe })
-      setErroMsg('')
       successAuth(result)
       reset()
     } catch (error) {
