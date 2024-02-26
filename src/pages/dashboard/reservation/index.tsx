@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 
 const CalendarComponent = React.lazy(() => import('./CalendarComponent'))
+
 const Reservation: React.FC = () => {
   const { data } = useQuery(PropertiesQuery())
 

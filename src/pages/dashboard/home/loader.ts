@@ -1,36 +1,41 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Property } from 'models/Property'
 import { QueryClient } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { PropertiesQuery } from 'services/fetchProperties'
 import { ReservationsTypeQuery } from 'services/reservationsByType'
 import { Reservation, ReservationsType } from 'models/Reservation'
 
+export interface HomeLoaderResponse {
+  initialDataProperties: Property[]
+  initialDataReservation: Reservation[]
+  success: boolean
+}
+
 export const loader = async (
   queryClient: QueryClient,
   type: ReservationsType
-) => {
+): Promise<HomeLoaderResponse> => {
   try {
-    const properties = await queryClient.fetchQuery(PropertiesQuery())
+    const initialDataProperties = await queryClient.ensureQueryData({
+      ...PropertiesQuery()
+    })
 
-    const reservationByType = await queryClient.fetchQuery(
+    const initialDataReservation = await queryClient.ensureQueryData(
       ReservationsTypeQuery(type)
     )
 
-    const select = (properties: Property[], reservations: Reservation[]) =>
-      reservations.map(reservation => ({
-        ...reservation,
-        property: (properties || [])!.find(
-          property => property._id === reservation.propertyId
-        )
-      }))
-
     return {
-      data: select(properties ?? [], reservationByType ?? []),
+      initialDataProperties,
+      initialDataReservation,
       success: true
     }
   } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 401) throw error
     return {
-      data: [],
+      initialDataProperties: [],
+      initialDataReservation: [],
       success: false
     }
   }

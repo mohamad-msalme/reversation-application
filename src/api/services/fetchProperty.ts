@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { axiosInstance } from 'client/axiosInstance'
 import { SuccessPropertyResponse } from 'models/Property'
 
@@ -11,10 +12,8 @@ export const fetchProperty = async (id: string) => {
     const data = await axiosInstance.get<SuccessPropertyResponse>(
       `/properties/${id}`
     )
-    console.log(data)
     return data.data.success.property
   } catch (error) {
-    //
-    return undefined
+    throw error
   }
 }

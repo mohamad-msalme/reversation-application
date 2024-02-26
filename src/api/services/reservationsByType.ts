@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { axiosInstance } from 'client/axiosInstance'
 import {
@@ -17,6 +18,6 @@ const getReservationsByType = async (type: ReservationsType) => {
     )
     return data.data.success.reservations
   } catch (error) {
-    return []
+    throw error
   }
 }

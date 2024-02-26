@@ -9,8 +9,9 @@ export class Coockies {
       expires: 1
     })
   }
-
+  //
   static getUserInfo() {
+    //
     const userInfo = cookies.get('user-info')
     try {
       const parsedVal = userInfo ? (JSON.parse(userInfo) as User) : undefined

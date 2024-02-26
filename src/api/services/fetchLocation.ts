@@ -22,6 +22,6 @@ const fetchLocation = async ({ lat, lng }: TCoord) => {
     return data.data.display_name
   } catch (error) {
     //
-    console.log(error)
+    return 'Somthing went wrong while fetching location'
   }
 }

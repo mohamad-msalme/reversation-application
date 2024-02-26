@@ -1,25 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
-import { Reservation } from 'models/Reservation'
+import { useQuery } from '@tanstack/react-query'
 import { HomePageProps } from './HomePage'
 import { ReservationCard } from './reservation-card/ReservationCard'
+import { HomeLoaderResponse } from './loader'
+import { ReservationsTypeQuery } from 'services/reservationsByType'
 import { PropertyOutletContext } from '../property'
+import { PropertiesQuery, select } from 'services/fetchProperties'
 import { Box, CardContent, Typography } from '@mui/material'
 import { useLoaderData, useOutletContext } from 'react-router-dom'
 
 export const ReservationCards: React.FC<HomePageProps> = ({ type, title }) => {
   const { showNotification } = useOutletContext<PropertyOutletContext>()
-  const { data, success } = useLoaderData() as {
-    data: Reservation[]
-    success: boolean
-  }
+  const { initialDataProperties, initialDataReservation, success } =
+    useLoaderData() as HomeLoaderResponse
+  const { data: properties } = useQuery({
+    ...PropertiesQuery(),
+    initialData: initialDataProperties
+  })
+  const { data: reservations } = useQuery({
+    ...ReservationsTypeQuery(type),
+    initialData: initialDataReservation,
+    select: reservations => select(properties ?? [], reservations)
+  })
 
   React.useMemo(
     () => !success && showNotification(`Error fetch ${type}`, 'error'),
     [type]
   )
 
-  if (data.length === 0) {
+  if (reservations.length === 0) {
     return (
       <Box
         pt={5}
@@ -35,7 +45,7 @@ export const ReservationCards: React.FC<HomePageProps> = ({ type, title }) => {
 
   return (
     <>
-      {data.map(reservation => (
+      {reservations.map(reservation => (
         <ReservationCard
           key={reservation.reservationId}
           reservation={reservation}

@@ -31,6 +31,7 @@ export const useNotification = () => {
   const handleClose = React.useCallback(
     (e: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
+        //
         return
       }
       setOpen(false)
@@ -51,8 +52,6 @@ export const useNotification = () => {
     ),
     [handleClose]
   )
-
-  console.log({ open })
 
   const Notification = React.useCallback<
     React.FC<{ alertProps?: AlertProps; snackbarProps?: SnackbarProps }>

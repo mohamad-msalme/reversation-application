@@ -1,5 +1,7 @@
+/* eslint-disable no-useless-catch */
 import { axiosInstance } from 'client/axiosInstance'
-import { SuccessPropertiesResponse } from 'models/Property'
+import { Property, SuccessPropertiesResponse } from 'models/Property'
+import { Reservation } from 'models/Reservation'
 
 export const PropertiesQuery = () => ({
   queryKey: ['PropertiesQuery'],
@@ -12,7 +14,14 @@ const fetchProperties = async () => {
       await axiosInstance.get<SuccessPropertiesResponse>(`/properties`)
     return data.data.success.properties
   } catch (error) {
-    //
-    console.log(error)
+    throw error
   }
 }
+
+export const select = (properties: Property[], reservations: Reservation[]) =>
+  reservations.map(reservation => ({
+    ...reservation,
+    property: properties.find(
+      property => property._id === reservation.propertyId
+    )
+  }))

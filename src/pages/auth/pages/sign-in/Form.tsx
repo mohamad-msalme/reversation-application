@@ -48,8 +48,8 @@ export const Form: React.FC = () => {
       setErroMsg('')
       const result = await mutateAsync(rest)
       if (rememberMe) Coockies.updateUserCradintional({ ...rest, rememberMe })
-      successAuth(result)
       reset()
+      successAuth(result)
     } catch (error) {
       const _error = error as { message: string }
       setErroMsg(_error.message)
