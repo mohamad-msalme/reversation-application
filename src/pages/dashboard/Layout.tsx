@@ -2,12 +2,14 @@ import React from 'react'
 import { Header } from './Header'
 import { NavBar } from './NavBar'
 import { Outlet } from 'react-router-dom'
-import { Backdrop, Box, CircularProgress, Theme, useTheme } from '@mui/material'
+import { loader } from './loader'
+import { Loading } from './loading'
+import { Box, Theme, useTheme } from '@mui/material'
 
 import './layout.scss'
 import clsx from 'clsx'
 
-export const DashboardLayout: React.FC = () => {
+export const DashboardLayout = () => {
   const isDark = useTheme<Theme>().palette.mode === 'dark'
   const [menuIcon, setMenuIcon] = React.useState(false)
   return (
@@ -23,29 +25,12 @@ export const DashboardLayout: React.FC = () => {
           'main--dark': isDark
         })}
       >
-        <React.Suspense
-          fallback={
-            <div
-              style={{
-                width: '100%',
-                height: '100%'
-              }}
-            >
-              <Backdrop
-                sx={{
-                  color: '#fff',
-                  zIndex: theme => theme.zIndex.drawer + 1
-                }}
-                open
-              >
-                <CircularProgress color="primary" />
-              </Backdrop>
-            </div>
-          }
-        >
+        <React.Suspense fallback={<Loading />}>
           <Outlet />
         </React.Suspense>
       </Box>
     </Box>
   )
 }
+
+DashboardLayout.loader = loader

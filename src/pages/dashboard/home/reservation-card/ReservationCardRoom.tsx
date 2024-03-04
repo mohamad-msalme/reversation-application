@@ -9,12 +9,12 @@ export const ReservationCardRoom: React.FC = () => {
   return (
     <Box display="flex" columnGap={1} alignItems="center">
       <ApartmentIcon color="info" />
-      <b>Room: </b>
+      <b>Properties: </b>
       <Typography variant="body1">
         {isLoading ? (
           <Skeleton width={150} height={50} />
         ) : (
-          reservation?.property?.name
+          reservation?.properties.map(property => property.name).join(' ')
         )}
       </Typography>
     </Box>

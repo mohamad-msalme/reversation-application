@@ -1,3 +1,4 @@
+export type PropertyType = 'public' | 'private' | 'all'
 export interface PropertyAddress {
   city: string
   country: string
@@ -13,6 +14,7 @@ export interface Property {
   createdAt: Date
   updatedAt: Date
   __v: number
+  type: PropertyType
 }
 
 export interface SuccessPropertiesResponse {

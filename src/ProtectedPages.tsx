@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React from 'react'
 
-import HomeIcon from '@mui/icons-material/Home'
-import Property from 'pages/dashboard/property'
-import DeleteDialog from 'pages/dashboard/property/components/DeleteDialog'
-import ApartmentIcon from '@mui/icons-material/Apartment'
-import EditCalendarIcon from '@mui/icons-material/EditCalendar'
-import HomeLayout from 'pages/dashboard/home/HomeLayout'
 import { HomePage } from 'pages/dashboard/home/HomePage'
-import EditDialog from 'pages/dashboard/property/components/EditDialog'
-import Reservation from 'pages/dashboard/reservation'
 import { RouteObject } from 'react-router-dom'
 import { QueryClient } from '@tanstack/react-query'
+
+import HomeIcon from '@mui/icons-material/Home'
+import Property from 'pages/dashboard/properties'
+import HomeLayout from 'pages/dashboard/home/HomeLayout'
+import EditDialog from 'pages/dashboard/properties/property-edit-dialog/EditDialog'
+import Reservation from 'pages/dashboard/reservation'
+import DeleteDialog from 'pages/dashboard/properties/property-delete-dialog/DeleteDialog'
+import ApartmentIcon from '@mui/icons-material/Apartment'
+import EditCalendarIcon from '@mui/icons-material/EditCalendar'
+import { ReservationDialog } from 'pages/dashboard/reservation/reservation-dialog'
 
 export type TPROTECTED_PAGES = {
   path?: string
@@ -23,6 +25,7 @@ export type TPROTECTED_PAGES = {
 }
 
 const queryClient = new QueryClient()
+
 export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
   {
     label: 'Home',
@@ -53,17 +56,34 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
     ]
   },
   {
-    path: '/reservation',
-    label: 'Reservation ',
+    path: '/reservations',
+    label: 'Reservations',
     icon: <EditCalendarIcon />,
-    element: <Reservation />
+    element: <Reservation />,
+    loader: Reservation.loader(queryClient),
+    children: [
+      {
+        path: 'new',
+        label: 'Reservation ',
+        icon: <EditCalendarIcon />,
+        element: <ReservationDialog />,
+        loader: ReservationDialog.loader(queryClient)
+      },
+      {
+        path: ':id',
+        label: 'Reservation ',
+        icon: <EditCalendarIcon />,
+        element: <ReservationDialog />,
+        loader: ReservationDialog.loader(queryClient)
+      }
+    ]
   },
   {
-    path: '/property',
-    label: 'Property',
+    path: '/properties',
+    label: 'Properties',
     icon: <ApartmentIcon />,
     element: <Property />,
-    loader: Property.loader.bind(undefined, queryClient),
+    loader: Property.loader(queryClient),
     children: [
       {
         path: 'edit/:id',
@@ -90,9 +110,9 @@ export const PROTECTED_PAGES: TPROTECTED_PAGES[] = [
       {
         path: 'delete/:id',
         label: 'Delete property',
-
         icon: <ApartmentIcon />,
-        element: <DeleteDialog />
+        element: <DeleteDialog />,
+        loader: DeleteDialog.loader(queryClient)
       }
     ]
   }

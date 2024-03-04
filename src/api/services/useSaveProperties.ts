@@ -1,55 +1,57 @@
-import { PropertyForm } from 'pages/dashboard/property/components/PropertyFormSchema'
 import { isAxiosError } from 'axios'
+import { PropertyForm } from 'schemas/index'
 import { axiosInstance } from 'client/axiosInstance'
 import { PropertyQuery } from './fetchProperty'
-import { PropertiesQuery } from './fetchProperties'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export const postProperties = async (payload: PropertyForm) => {
+export const CreatePropertyMutation = () => ({
+  mutationKey: ['CreatePropertyMutation'],
+  mutationFn: async (payload: PropertyForm) => postProperties(payload)
+})
+
+export const UpdatePropertyMutation = () => ({
+  mutationKey: ['UpdatePropertyMutation'],
+  mutationFn: async (payload: { id: string; data: PropertyForm }) =>
+    patchProperties(payload)
+})
+
+const handelError = (error: unknown) => {
+  let message = 'Somthing went wrong, please try again'
+  if (isAxiosError(error) && error.status === 401) throw error
+  if (
+    isAxiosError<{ errors: [{ message: string }] }>(error) &&
+    error.response?.data.errors &&
+    error.response?.data.errors.length > 0
+  ) {
+    message = error.response.data.errors[0].message
+  }
+  throw Error(message)
+}
+
+const postProperties = async (payload: PropertyForm) => {
   try {
     await axiosInstance.post('/properties', payload)
   } catch (error) {
-    let message = 'Somthing went wrong, please try again'
-    if (
-      isAxiosError<{ errors: [{ message: string }] }>(error) &&
-      error.response?.data.errors &&
-      error.response?.data.errors.length > 0
-    ) {
-      message = error.response.data.errors[0].message
-    }
-    throw Error(message)
+    handelError(error)
   }
 }
 
-export const patchProperties = async (payload: {
-  id: string
-  data: PropertyForm
-}) => {
+const patchProperties = async (payload: { id: string; data: PropertyForm }) => {
   try {
     await axiosInstance.patch(`/properties/${payload.id}`, payload.data)
   } catch (error) {
-    let message = 'Somthing went wrong, please try again'
-    if (
-      isAxiosError<{ errors: [{ message: string }] }>(error) &&
-      error.response?.data.errors &&
-      error.response?.data.errors.length > 0
-    ) {
-      message = error.response.data.errors[0].message
-    }
-    throw Error(message)
+    handelError(error)
   }
 }
 
 export const useSaveProperties = (id?: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync: postAsync, ...post } = useMutation({
-    mutationKey: ['postProperties'],
-    mutationFn: postProperties
-  })
-  const { mutateAsync: patchAsync, ...patch } = useMutation({
-    mutationKey: ['patchProperties'],
-    mutationFn: patchProperties
-  })
+  const { mutateAsync: postAsync, ...post } = useMutation(
+    CreatePropertyMutation()
+  )
+  const { mutateAsync: patchAsync, ...patch } = useMutation(
+    UpdatePropertyMutation()
+  )
 
   const save = async (payload: PropertyForm) => {
     if (id) {
@@ -57,15 +59,12 @@ export const useSaveProperties = (id?: string) => {
       await queryClient.invalidateQueries({
         queryKey: PropertyQuery(id).queryKey
       })
-      await queryClient.invalidateQueries({
-        queryKey: PropertiesQuery().queryKey
-      })
     } else {
       await postAsync(payload)
-      await queryClient.invalidateQueries({
-        queryKey: PropertiesQuery().queryKey
-      })
     }
+    await queryClient.invalidateQueries({
+      queryKey: ['PropertiesQuery']
+    })
   }
 
   return {

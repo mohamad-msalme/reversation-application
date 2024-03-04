@@ -3,6 +3,7 @@ import * as React from 'react'
 import { NavBarItem } from './NavBarItem'
 import { PROTECTED_PAGES } from './../../ProtectedPages'
 import { Drawer, List, Theme, useMediaQuery } from '@mui/material'
+
 type TNavBar = {
   menuState: boolean
   onMenuClick: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,7 +25,11 @@ export const NavBar: React.FC<TNavBar> = ({ menuState, onMenuClick }) => {
     >
       <List>
         {PROTECTED_PAGES.map(item => (
-          <NavBarItem key={item.path} {...item} menuState={menuState} />
+          <NavBarItem
+            key={item.path || item.label}
+            {...item}
+            menuState={menuState}
+          />
         ))}
       </List>
     </Drawer>

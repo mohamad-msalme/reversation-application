@@ -1,8 +1,8 @@
 import { MuiLink } from './MuiLink'
 import { MuiDrawer } from './MuiDrawer'
-import { Components, Palette } from '@mui/material'
 import { MuiButtonGroup } from './MuiButtonGroup'
 import { MuiDialogActions } from './MuiDialogActions'
+import { Components, Palette } from '@mui/material'
 
 export const components = (props: Palette): Components => {
   return {

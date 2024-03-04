@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { TPROTECTED_PAGES } from 'src/ProtectedPages'
-import { Link, useLocation } from 'react-router-dom'
+import { useNavBarItemPath } from './useNavBarItemPath'
 
 import {
   ListItem,
@@ -22,20 +23,13 @@ export const NavBarItem: React.FC<TNavBarItem> = ({
   menuState,
   icon
 }) => {
+  const { _path, isSelected } = useNavBarItemPath(path)
   const isTablet =
     useMediaQuery<Theme>(theme => theme.breakpoints.down('md')) || menuState
   const isMobile =
     useMediaQuery<Theme>(theme => theme.breakpoints.down('sm')) || menuState
-  const location = useLocation()
   const Item = (
-    <ListItemButton
-      component={Link}
-      to={path ?? '/home/arrivals'}
-      selected={
-        location.pathname === path ||
-        location.pathname.includes(path ?? '/home/arrivals')
-      }
-    >
+    <ListItemButton component={Link} to={_path} selected={isSelected}>
       <ListItemIcon
         sx={theme => ({
           justifyContent: isMobile ? 'normal' : isTablet ? 'center' : 'normal',

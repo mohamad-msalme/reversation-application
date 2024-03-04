@@ -4,11 +4,6 @@ import { Link, Outlet } from 'react-router-dom'
 import { Box, Tab, Tabs } from '@mui/material'
 import { useNotification } from 'hooks/useNotification'
 
-export const homeTabs: Record<number, string> = {
-  0: '/home/arrivals',
-  1: '/home/departure',
-  2: '/home/staysover'
-}
 const HomeLayout = () => {
   const [value, setValue] = React.useState(0)
   const [isPending, startTransition] = React.useTransition()
@@ -28,5 +23,6 @@ const HomeLayout = () => {
     </Box>
   )
 }
+
 HomeLayout.loader = loader
 export default HomeLayout

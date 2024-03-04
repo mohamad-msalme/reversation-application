@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
   {
     element: <DashboardLayout />,
     errorElement: <ErrorPage />,
-    loader: Root.loader(queryClient),
+    loader: DashboardLayout.loader(queryClient),
     children: PROTECTED_PAGES.map(({ path, loader, element, children }) => ({
       path,
       loader,

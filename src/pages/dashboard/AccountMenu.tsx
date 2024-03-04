@@ -4,6 +4,7 @@ import React from 'react'
 import Person2Icon from '@mui/icons-material/Person2'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { Logout } from '@mui/icons-material'
+import { useLogout } from 'services/useLogout'
 import {
   Divider,
   IconButton,
@@ -13,7 +14,6 @@ import {
   MenuItem,
   Tooltip
 } from '@mui/material'
-import { useLogout } from 'services/useLogout'
 
 export const AccountMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
