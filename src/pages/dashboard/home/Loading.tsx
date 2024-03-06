@@ -4,7 +4,12 @@ import { ReservationCard } from './reservation-card/ReservationCard'
 
 export const Loading: React.FC = () =>
   [1, 2, 3].map(reservation => (
-    <ReservationCard isLoading key={reservation} reservation={null}>
+    <ReservationCard
+      type="arrivals"
+      isLoading
+      key={reservation}
+      reservation={null}
+    >
       <CardContent>
         <ReservationCard.Name />
         <ReservationCard.CheckIn />

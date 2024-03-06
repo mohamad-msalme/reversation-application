@@ -17,7 +17,7 @@ export const CreateReservationBtn: React.FC = () => {
       name="create"
       onClick={handelClick}
     >
-      Create
+      Add Reservation
     </Button>
   )
 }

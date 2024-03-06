@@ -20,9 +20,10 @@ export const HomePage: React.FC<HomePageProps> = ({ type, title }) => {
       p={2}
       sx={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(18rem, 28rem))',
         gap: '2vw 2vh',
-        opacity: isPending ? 0.5 : 1
+        opacity: isPending ? 0.5 : 1,
+        justifyContent: 'center'
       }}
     >
       <React.Suspense fallback={<Loading />}>

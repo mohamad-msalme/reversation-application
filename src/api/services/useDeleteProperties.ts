@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable no-unused-vars */
 import { axiosInstance } from 'client/axiosInstance'
 import { SuccessPropertyResponse } from 'models/Property'
@@ -16,7 +17,6 @@ const postDeleteProperties = async (id?: string) => {
     )
     return data.data.success.property
   } catch (error) {
-    console.log(error)
     throw error
   }
 }

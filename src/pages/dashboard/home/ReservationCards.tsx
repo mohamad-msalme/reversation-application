@@ -26,6 +26,7 @@ export const ReservationCards: React.FC<HomePageProps> = ({ type, title }) => {
     <>
       {reservations.map(reservation => (
         <ReservationCard
+          type={type}
           key={reservation.reservationId}
           reservation={reservation}
         >
@@ -40,11 +41,8 @@ export const ReservationCards: React.FC<HomePageProps> = ({ type, title }) => {
             <ReservationCard.CheckIn />
             <ReservationCard.CheckOut />
             <ReservationCard.Room />
+            <ReservationCard.Key />
           </CardContent>
-          <ReservationCard.Actions actionArea>
-            <ReservationCard.Lock />
-            <ReservationCard.Unlock />
-          </ReservationCard.Actions>
         </ReservationCard>
       ))}
     </>

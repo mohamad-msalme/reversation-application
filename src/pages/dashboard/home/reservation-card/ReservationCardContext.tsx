@@ -1,12 +1,13 @@
-import { Reservation } from 'models/Reservation'
+import { Reservation, ReservationsType } from 'models/Reservation'
 import React, { useContext } from 'react'
 
 type ReservationCardContextProps = {
   reservation: Reservation | null
   isLoading?: boolean
+  type: ReservationsType
 }
 const ReservationCardContext = React.createContext<ReservationCardContextProps>(
-  { reservation: null }
+  { reservation: null, type: 'arrivals' }
 )
 
 export const useReservationCard = () => useContext(ReservationCardContext)

@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+
 import { axiosInstance } from 'client/axiosInstance'
 import { ReservationFormType } from 'schemas/index'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -11,7 +13,7 @@ const deleteReservation = async (id: string) => {
   try {
     await axiosInstance.delete(`reservations/${id}`)
   } catch (error) {
-    console.log(error)
+    throw error
   }
 }
 
@@ -35,7 +37,6 @@ const createReservation = async (data: ReservationFormType) => {
   try {
     await axiosInstance.post('/reservations', dataToSave)
   } catch (error) {
-    console.log({ error })
     throw error
   }
 }
@@ -61,7 +62,6 @@ const updateReservation = async (data: ReservationFormType) => {
   try {
     await axiosInstance.patch(`/reservations/${id}`, dataToSave)
   } catch (error) {
-    console.log({ error })
     throw error
   }
 }

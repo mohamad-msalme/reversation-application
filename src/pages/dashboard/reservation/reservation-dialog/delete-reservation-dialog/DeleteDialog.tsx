@@ -50,7 +50,6 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = ({
     } catch (error) {
       if (isAxiosError(error) && error.status === 401) throw error
       setErrorMsg('Somthing wend wrong please try again')
-      console.log(error)
     }
   }
   return (
